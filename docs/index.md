@@ -1,10 +1,10 @@
 ![Somewhere in New Mexico](media/bosqueapache.jpg)
 
-# @gremau's research notebook
+# Research notebook
 
-This is [my](http://greg.pronghorns.net) set of notes about ecology and earth system science. I use it as a research notebook to document project activities, lab and field procedures, notes on data analysis and statistics, preliminary results, and general info on the nuts and bolts of doing research. Topics here slant towards my reseach interests (biogeochemistry and ecohydrology) and pages are not very organized or well-written. I've posted it nevertheless so others might derive some value from it.
+This is [Greg Maurer](https://greg.pronghorns.net)'s research notebook. It is filled with assorted lab and field procedures, activity logs for various projects, preliminary research results, and many "notes to my future self" about data analysis, statistics, programming and computing. The pages are not always well organized or well-written, but if you found your way here maybe it will have some value for you. Feel free to [contact me](greg@pronghorns.net) if you have questions or want to collaborate.
 
-**Cautionary note:** All data, code, figures, results, and discussions are presented in their raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety. Feel free to contact me with questions and to suggest changes or additions.
+**Caution**: All data, code, results, and discussions are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
 
 ## Navigation
 

@@ -7,6 +7,9 @@ site_author: Gregory E. Maurer
 #    - Sites: 'sites/SitesIndex.md'
 theme:
   name: material
-repo_url: https://github.com/gremau/EarthSciNotebook
-site_url: https://greg.pronghorns.net/EarthSciNotebook
+  palette:
+    scheme: slate
+    primary: lime
+repo_url: https://github.com/gremau/research-notebook
+site_url: https://greg.pronghorns.net/research-notebook
 edit_uri: edit/main/docs/
