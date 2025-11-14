@@ -1,0 +1,1214 @@
+;{CR23X}
+; HC_Forest1_v3.csi
+;
+; Controls Hidden Canyon Forest1 datalogger (1)
+; Operates 2 multiplexers, each with 6 Decagon EC-TM and 6 Campbell CS-616/615 sensors,
+; and 3 IR radiometers, 1 T/H probe, 1 windset (direct to CR23x)
+;
+; by Greg Maurer
+; version 1 (11/02/2009)
+; version 2 (01/07/10): Doubled delay in instruction 15 (serial I/O) to 50. This had little effect on reading the decagon sensors
+; version 3 01/13/10): Added CS 615 loops to the Campbell processing instructions (there are 5 CS-615's in the profiles)
+;
+*Table 1 Program
+  01: 60        Execution Interval (seconds)
+
+;--------------------------------------------------------------------------------
+; Datalogger measurements
+;
+;----Measure battery voltage----
+1:  Batt Voltage (P10)
+ 1: 1        Loc [ batt_volt ]
+
+;----Measure panel temperature of datalogger----
+2:  Panel Temperature (P17)
+ 1: 2        Loc [ panelT    ]
+
+;--------------------------------------------------------------------------------
+;MUX1 and MUX2 soil sensor loops----
+;
+; Each is wired to 6 Decagon and 6 Campbell sensors
+; 4x16 mode, each sensor gets its own channel
+; MUX1 and MUX2 are wired to Forest1-CR23x as follows
+; Res      ---> C1 and C3
+; Clk      ---> C2 and C4
+; 12V and G---> 12V and G
+; COM OddH ---> SW12vdc
+; COM OddL ---> C5 and 6
+; COM EvenH---> 12vdc
+; COM EvenL---> SE 1 & 2
+; COM Grnd ---> CR23x Grnd
+;
+;
+;----Campbell CS-616/15 sensor---
+;
+; Orange(enable)---> Odd H (SW12vdc)
+; Green(signal) ---> Even L (SE 1/2)
+; Red(12V)      ---> Even H (12vdc)
+; Black(ground) ---> common ground
+; Clear(shield) ---> common ground
+;
+;----Decagon EC-TM sensor----
+;
+; Wiring to AM16/32 panel is:
+; White(excite) ---> Odd H (SW12vdc)
+; Red (signal)  ---> Odd L (C5)
+; Bare (sheath) ---> common ground
+;
+
+;-----Reset MUX1-----
+3:  Do (P86)
+ 1: 41       Set Port 1 High
+
+;-----DECAGON sensors channels 1-6-----
+; Pit 1 & 3, in order: 5cm, 20cm, 60cm, 5cm, 20cm, 60cm
+; Need a 5 second resting period between excitation
+
+; Set number of times to increment MUX1
+4:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 6        Loop Count
+
+     5:  Step Loop Index (P90)
+      1: 3        Step
+
+     6:  Do (P86)
+      1: 72       Pulse Port 2
+
+;POWER UP SENSOR
+     7:  Do (P86)
+      1: 49       Turn On Switched 12V
+
+;DELAY FOR SENSOR TO POWER UP AND SEND DATA - Important!
+     8:  Delay w/Opt Excitation (P22)
+      1: 1        Ex Channel
+      2: 0        Delay W/Ex (0.01 sec units)
+      3: 50       Delay After Ex (0.01 sec units)
+      4: 0        mV Excitation
+
+; READ SERIAL DATA
+; MAKE SURE MUX COMMON GND IS NOT SHARED WITH POWER GROUND, OTHERWISE
+; SIGNAL IS SHORTED.
+     9:  Port Serial I/O (P15)
+      1: 1        Reps
+      2: 31       TTL ASCII, 1200 Baud
+      3: 0        TX after CTS
+      4: 5        No RTS/DTR, C5 TXD/RXD
+      5: 3        Start Loc for TX [ P1_5_1    ]
+      6: 0        Number of Locs to TX
+      7: 13       Termination Character for RX
+      8: 50       RX Buffer Size or Max Chars to RX if Par 2 indexed (--)
+      9: 1        Time Out for CTS (TX) and/or RX (0.01 sec units)
+     10: 3    --  Start Loc for RX [ P1_5_1    ]
+     11: 1        Multiplier for RX
+     12: 0        Offset for RX
+
+;POWER OFF SENSOR
+     10:  Do (P86)
+      1: 59       Turn Off Switched 12V
+
+11:  End (P95)
+
+;-----CAMPBELL CS616 and 615 sensors channels 7-12-----
+; Pit 2 & 4, in order: 5cm, 20cm, 60cm, 5cm, 20cm, 60cm
+
+; Set number of times to increment MUX1
+
+; CAMPBELL LOOP 1: All 3 616 sensors in Pit 2
+
+12:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 3        Loop Count
+
+     13:  Step Loop Index (P90)
+      1: 1        Step
+
+     14:  Do (P86)
+      1: 72       Pulse Port 2
+
+     15:  Delay w/Opt Excitation (P22)
+      1: 1        Ex Channel
+      2: 0        Delay W/Ex (0.01 sec units)
+      3: 1        Delay After Ex (0.01 sec units)
+      4: 0        mV Excitation
+
+; USE SW12V to enable CS616, C5 & C6 are in serial mode
+     16:  Do (P86)
+      1: 49       Turn On Switched 12V
+
+     17:  Period Average (SE) (P27)
+      1: 1        Reps
+      2: 4        200 kHz Max Freq @ 500 mV Peak to Peak, Period Output
+      3: 1        SE Channel
+      4: 100      No. of Cycles
+      5: 1        Timeout (0.01 sec units)
+      6: 21    -- Loc [ Period1   ]
+      7: 1.0      Multiplier
+      8: 0.0      Offset
+
+     18:  Do (P86)
+      1: 59       Turn Off Switched 12V
+
+19:  End (P95)
+
+; CONVERT Pit 2 periods to soil VWC
+20:  Polynomial (P55)
+ 1: 3        Reps
+ 2: 21       X Loc [ Period1   ]
+ 3: 27       F(X) Loc [ P2_5_SM   ]
+ 4: -.0663   C0
+ 5: -.0063   C1
+ 6: 0.0007   C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+
+; CAMPBELL LOOP 2: 5 & 20cm 615s in Profile 4
+
+21:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 2        Loop Count
+
+     22:  Step Loop Index (P90)
+      1: 1        Step
+
+     23:  Do (P86)
+      1: 72       Pulse Port 2
+
+     24:  Delay w/Opt Excitation (P22)
+      1: 1        Ex Channel
+      2: 0        Delay W/Ex (0.01 sec units)
+      3: 1        Delay After Ex (0.01 sec units)
+      4: 0        mV Excitation
+
+; USE SW12V to enable CS616, C5 & C6 are in serial mode
+     25:  Do (P86)
+      1: 49       Turn On Switched 12V
+
+     26:  Period Average (SE) (P27)
+      1: 1        Reps
+      2: 4        200 kHz Max Freq @ 500 mV Peak to Peak, Period Output
+      3: 1        SE Channel
+      4: 10       No. of Cycles
+      5: 5        Timeout (0.01 sec units)
+      6: 24    -- Loc [ Period4   ]
+      7: .001     Multiplier
+      8: 0.0      Offset
+
+     27:  Do (P86)
+      1: 59       Turn Off Switched 12V
+
+28:  End (P95)
+
+; CONVERT Pit 4 (5&20cm) periods to soil VWC
+; These coefficients are for a low EC ( <1.0 dS per meter)
+29:  Polynomial (P55)
+ 1: 2        Reps
+ 2: 24       X Loc [ Period4   ]
+ 3: 30       F(X) Loc [ P4_5_SM   ]
+ 4: -0.187   C0
+ 5: 0.037    C1
+ 6: 0.335    C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+; READ CAMPBELL SENSOR in Profile 4: 60cm (CS616)
+
+30:  Do (P86)
+ 1: 72       Pulse Port 2
+
+31:  Delay w/Opt Excitation (P22)
+ 1: 1        Ex Channel
+ 2: 0        Delay W/Ex (0.01 sec units)
+ 3: 1        Delay After Ex (0.01 sec units)
+ 4: 0        mV Excitation
+
+; USE SW12V to enable CS616, C5 & C6 are in serial mode
+32:  Do (P86)
+ 1: 49       Turn On Switched 12V
+
+33:  Period Average (SE) (P27)
+ 1: 1        Reps
+ 2: 4        200 kHz Max Freq @ 500 mV Peak to Peak, Period Output
+ 3: 1        SE Channel
+ 4: 100      No. of Cycles
+ 5: 1        Timeout (0.01 sec units)
+ 6: 26       Loc [ Period6   ]
+ 7: 1.0      Multiplier
+ 8: 0.0      Offset
+
+34:  Do (P86)
+ 1: 59       Turn Off Switched 12V
+
+; CONVERT Pit 4 (60cm) period to soil VWC
+35:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 26       X Loc [ Period6   ]
+ 3: 32       F(X) Loc [ P4_60_SM  ]
+ 4: -.0663   C0
+ 5: -.0063   C1
+ 6: 0.0007   C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+; POWER OFF MUX1
+36:  Do (P86)
+ 1: 51       Set Port 1 Low
+
+
+;-----Reset MUX2-----
+37:  Do (P86)
+ 1: 43       Set Port 3 High
+
+;-----DECAGON sensors channels 1-6-----
+; Pit 5 & 7, in order: 5cm, 20cm, 60cm, 5cm, 20cm, 60cm
+
+; Set number of times to increment MUX2
+38:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 6        Loop Count
+
+     39:  Step Loop Index (P90)
+      1: 3        Step
+
+     40:  Do (P86)
+      1: 74       Pulse Port 4
+
+;POWER UP SENSOR
+     41:  Do (P86)
+      1: 49       Turn On Switched 12V
+
+;DELAY FOR SENSOR TO POWER UP AND SEND DATA - Important!
+     42:  Delay w/Opt Excitation (P22)
+      1: 1        Ex Channel
+      2: 0        Delay W/Ex (0.01 sec units)
+      3: 50       Delay After Ex (0.01 sec units)
+      4: 0        mV Excitation
+
+; MAKE SURE MUX COMMON GND IS NOT SHARED WITH POWER GROUND, OTHERWISE
+; SIGNAL IS SHORTED.
+     43:  Port Serial I/O (P15)
+      1: 1        Reps
+      2: 31       TTL ASCII, 1200 Baud
+      3: 0        TX after CTS
+      4: 6        No RTS/DTR, C6 TXD/RXD
+      5: 33       Start Loc for TX [ P5_5_1    ]
+      6: 0        Number of Locs to TX
+      7: 13       Termination Character for RX
+      8: 50       RX Buffer Size or Max Chars to RX if Par 2 indexed (--)
+      9: 1        Time Out for CTS (TX) and/or RX (0.01 sec units)
+     10: 33   --  Start Loc for RX [ P5_5_1    ]
+     11: 1        Multiplier for RX
+     12: 0        Offset for RX
+
+;POWER OFF SENSOR
+     44:  Do (P86)
+      1: 59       Turn Off Switched 12V
+
+45:  End (P95)
+
+;-----CAMPBELL CS616/615 sensors channels 7-12-----
+; Pit 6 & 8, in order: 5cm, 20cm, 60cm, 5cm, 20cm, 60cm
+
+
+; CAMPBELL LOOP 1: 2 CS 616s in Profile 6 (5 & 20cm)
+
+; Set number of times to increment MUX2
+46:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 2        Loop Count
+
+     47:  Step Loop Index (P90)
+      1: 1        Step
+
+     48:  Do (P86)
+      1: 74       Pulse Port 4
+
+     49:  Delay w/Opt Excitation (P22)
+      1: 1        Ex Channel
+      2: 0        Delay W/Ex (0.01 sec units)
+      3: 1        Delay After Ex (0.01 sec units)
+      4: 0        mV Excitation
+
+     50:  Do (P86)
+      1: 49       Turn On Switched 12V
+
+; USE SW12V to enable CS616, C5 & C6 are in serial mode
+     51:  Period Average (SE) (P27)
+      1: 1        Reps
+      2: 4        200 kHz Max Freq @ 500 mV Peak to Peak, Period Output
+      3: 2        SE Channel
+      4: 100      No. of Cycles
+      5: 1        Timeout (0.01 sec units)
+      6: 51    -- Loc [ Period7   ]
+      7: 1.0      Multiplier
+      8: 0.0      Offset
+
+     52:  Do (P86)
+      1: 59       Turn Off Switched 12V
+
+53:  End (P95)
+
+; CONVERT period to soil VWC
+54:  Polynomial (P55)
+ 1: 2        Reps
+ 2: 51       X Loc [ Period7   ]
+ 3: 57       F(X) Loc [ P6_5_SM   ]
+ 4: -.0663   C0
+ 5: -.0063   C1
+ 6: 0.0007   C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+; CAMPBELL LOOP 2:  615s in Profile 6 (60cm) and Profile 8 (all 3 depths)
+
+55:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 4        Loop Count
+
+     56:  Step Loop Index (P90)
+      1: 1        Step
+
+     57:  Do (P86)
+      1: 74       Pulse Port 4
+
+     58:  Delay w/Opt Excitation (P22)
+      1: 1        Ex Channel
+      2: 0        Delay W/Ex (0.01 sec units)
+      3: 1        Delay After Ex (0.01 sec units)
+      4: 0        mV Excitation
+
+; USE SW12V to enable CS615s, C5 & C6 are in serial mode
+     59:  Do (P86)
+      1: 49       Turn On Switched 12V
+
+     60:  Period Average (SE) (P27)
+      1: 1        Reps
+      2: 4        200 kHz Max Freq @ 500 mV Peak to Peak, Period Output
+      3: 2        SE Channel
+      4: 10       No. of Cycles
+      5: 5        Timeout (0.01 sec units)
+      6: 53    -- Loc [ Period9   ]
+      7: .001     Multiplier
+      8: 0.0      Offset
+
+     61:  Do (P86)
+      1: 59       Turn Off Switched 12V
+
+62:  End (P95)
+
+; CONVERT Pit 6 (60cm) and Pit 8 (all 3 depths) period to soil VWC
+; These coefficients are for a low EC ( <1.0 dS per meter)
+63:  Polynomial (P55)
+ 1: 4        Reps
+ 2: 53       X Loc [ Period9   ]
+ 3: 59       F(X) Loc [ P6_60_SM  ]
+ 4: -0.187   C0
+ 5: 0.037    C1
+ 6: 0.335    C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+; POWER OFF MUX2
+64:  Do (P86)
+ 1: 53       Set Port 3 Low
+
+;--------------------------------------------------------------------------------
+; Sensors at Forest1 tower
+;
+;----- Apogee SI-111 Infrared radiometers-----
+; # 2361 - located over treatment plot
+; First measure resistnce of the thermistor and calculate sensor body
+; temperature
+
+65:  AC Half Bridge (P5)
+ 1: 1        Reps
+ 2: 25       5000 mV, 60 Hz Reject, Fast Range (same as code 45)
+ 3: 3        SE Channel
+ 4: 1        Excite all reps w/Exchan 1
+ 5: 2500     mV Excitation
+ 6: 63       Loc [ mV_thrm   ]
+ 7: 1.0      Multiplier
+ 8: 0.0      Offset
+
+66:  Z=1/X (P42)
+ 1: 63       X Loc [ mV_thrm   ]
+ 2: 64       Z Loc [ 1_mV_thrm ]
+
+67:  Z=X+F (P34)
+ 1: 64       X Loc [ 1_mV_thrm ]
+ 2: -1.0     F
+ 3: 65       Z Loc [ 2_mV_thrm ]
+
+68:  Z=X*F (P37)
+ 1: 65       X Loc [ 2_mV_thrm ]
+ 2: 24900    F
+ 3: 66       Z Loc [ R_thrm    ]
+
+69:  Z=LN(X) (P40)
+ 1: 66       X Loc [ R_thrm    ]
+ 2: 67       Z Loc [ InR_thrm  ]
+
+70:  Z=X*F (P37)
+ 1: 67       X Loc [ InR_thrm  ]
+ 2: 0.001    F
+ 3: 68       Z Loc [ Scaled_R  ]
+
+71:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 68       X Loc [ Scaled_R  ]
+ 3: 69       F(X) Loc [ SH_Coeffs ]
+ 4: .001129  C0
+ 5: .234108  C1
+ 6: 0.0      C2
+ 7: 87.7547  C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+72:  Z=1/X (P42)
+ 1: 69       X Loc [ SH_Coeffs ]
+ 2: 70       Z Loc [ SB_Temp_K ]
+
+73:  Z=X+F (P34)
+ 1: 70       X Loc [ SB_Temp_K ]
+ 2: -273.15  F
+ 3: 71       Z Loc [ SB_Temp_C ]
+
+; Measure mV output of thermopile
+
+74:  Volt (Diff) (P2)
+ 1: 1        Reps
+ 2: 21       10 mV, 60 Hz Reject, Slow Range
+ 3: 3        DIFF Channel
+ 4: 72       Loc [ mV_tpile  ]
+ 5: 1.0      Multiplier
+ 6: 0.0      Offset
+
+; Calculation of m(slope) coefficient for target temperature calculation.
+; Each sensor has unique C0, C1, and C2 values on their calibration sheet.
+
+75:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 71       X Loc [ SB_Temp_C ]
+ 3: 73       F(X) Loc [ m_slope   ]
+ 4: 14338.4  C0
+ 5: 62.2373  C1
+ 6: 0.86384  C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+76:  Z=X*F (P37)
+ 1: 73       X Loc [ m_slope   ]
+ 2: 99999    F
+ 3: 73       Z Loc [ m_slope   ]
+
+; Calculation of b (intercept) coefficient for target calculation. Each
+; sensor has unique C values (again - on calib sheet).
+
+77:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 71       X Loc [ SB_Temp_C ]
+ 3: 74       F(X) Loc [ b_inter   ]
+ 4: -12.7368 C0
+ 5: -4.82953 C1
+ 6: 0.28300  C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+78:  Z=X*F (P37)
+ 1: 74       X Loc [ b_inter   ]
+ 2: 99999    F
+ 3: 74       Z Loc [ b_inter   ]
+
+; Target temperature calculation based on m and b coefficients.
+
+
+79:  Z=F x 10^n (P30)
+ 1: 0.4      F
+ 2: 1        n, Exponent of 10
+ 3: 75       Z Loc [ Exponent1 ]
+
+80:  Z=F x 10^n (P30)
+ 1: .025     F
+ 2: 1        n, Exponent of 10
+ 3: 76       Z Loc [ Exponent2 ]
+
+81:  Z=X^Y (P47)
+ 1: 70       X Loc [ SB_Temp_K ]
+ 2: 75       Y Loc [ Exponent1 ]
+ 3: 77       Z Loc [ 1_SB_4Pow ]
+
+82:  Z=X*Y (P36)
+ 1: 72       X Loc [ mV_tpile  ]
+ 2: 73       Y Loc [ m_slope   ]
+ 3: 78       Z Loc [ 2_mVxm    ]
+
+83:  Z=X+Y (P33)
+ 1: 77       X Loc [ 1_SB_4Pow ]
+ 2: 78       Y Loc [ 2_mVxm    ]
+ 3: 79       Z Loc [ 3_Sum1    ]
+
+84:  Z=X+Y (P33)
+ 1: 74       X Loc [ b_inter   ]
+ 2: 79       Y Loc [ 3_Sum1    ]
+ 3: 80       Z Loc [ 4_Sum2    ]
+
+85:  Z=X^Y (P47)
+ 1: 80       X Loc [ 4_Sum2    ]
+ 2: 76       Y Loc [ Exponent2 ]
+ 3: 81       Z Loc [ SurfT_T_K ]
+
+86:  Z=X+F (P34)
+ 1: 81       X Loc [ SurfT_T_K ]
+ 2: -273.15  F
+ 3: 82       Z Loc [ SurfT_T_C ]
+
+;---- Apogee SI-111 Infrared radiometer ----
+; # 2364 - located over control treatment plot near Forest1
+; First measure resistnce of the thermistor and calculate sensor body
+; temperature
+
+87:  AC Half Bridge (P5)
+ 1: 1        Reps
+ 2: 25       5000 mV, 60 Hz Reject, Fast Range (same as code 45)
+ 3: 4        SE Channel
+ 4: 2        Excite all reps w/Exchan 2
+ 5: 2500     mV Excitation
+ 6: 63       Loc [ mV_thrm   ]
+ 7: 1.0      Multiplier
+ 8: 0.0      Offset
+
+88:  Z=1/X (P42)
+ 1: 63       X Loc [ mV_thrm   ]
+ 2: 64       Z Loc [ 1_mV_thrm ]
+
+89:  Z=X+F (P34)
+ 1: 64       X Loc [ 1_mV_thrm ]
+ 2: -1.0     F
+ 3: 65       Z Loc [ 2_mV_thrm ]
+
+90:  Z=X*F (P37)
+ 1: 65       X Loc [ 2_mV_thrm ]
+ 2: 24900    F
+ 3: 66       Z Loc [ R_thrm    ]
+
+91:  Z=LN(X) (P40)
+ 1: 66       X Loc [ R_thrm    ]
+ 2: 67       Z Loc [ InR_thrm  ]
+
+92:  Z=X*F (P37)
+ 1: 67       X Loc [ InR_thrm  ]
+ 2: 0.001    F
+ 3: 68       Z Loc [ Scaled_R  ]
+
+93:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 68       X Loc [ Scaled_R  ]
+ 3: 69       F(X) Loc [ SH_Coeffs ]
+ 4: .001129  C0
+ 5: .234108  C1
+ 6: 0.0      C2
+ 7: 87.7547  C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+94:  Z=1/X (P42)
+ 1: 69       X Loc [ SH_Coeffs ]
+ 2: 70       Z Loc [ SB_Temp_K ]
+
+95:  Z=X+F (P34)
+ 1: 70       X Loc [ SB_Temp_K ]
+ 2: -273.15  F
+ 3: 71       Z Loc [ SB_Temp_C ]
+
+; Measure mV output of thermopile
+
+96:  Volt (Diff) (P2)
+ 1: 1        Reps
+ 2: 21       10 mV, 60 Hz Reject, Slow Range
+ 3: 6        DIFF Channel
+ 4: 72       Loc [ mV_tpile  ]
+ 5: 1.0      Multiplier
+ 6: 0.0      Offset
+
+; Calculation of m(slope) coefficient for target temperature calculation.
+; Each sensor has unique C0, C1, and C2 values on their calibration sheet.
+
+97:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 71       X Loc [ SB_Temp_C ]
+ 3: 73       F(X) Loc [ m_slope   ]
+ 4: 13076.1  C0
+ 5: 73.8305  C1
+ 6: .60645   C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+98:  Z=X*F (P37)
+ 1: 73       X Loc [ m_slope   ]
+ 2: 99999    F
+ 3: 73       Z Loc [ m_slope   ]
+
+; Calculation of b (intercept) coefficient for target calculation. Each
+; sensor has unique C values (again - on calib sheet).
+
+99:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 71       X Loc [ SB_Temp_C ]
+ 3: 74       F(X) Loc [ b_inter   ]
+ 4: -82.1327 C0
+ 5: -9.16495 C1
+ 6: 0.35482  C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+100:  Z=X*F (P37)
+ 1: 74       X Loc [ b_inter   ]
+ 2: 99999    F
+ 3: 74       Z Loc [ b_inter   ]
+
+; Target temperature calculation based on m and b coefficients.
+
+
+101:  Z=F x 10^n (P30)
+ 1: 0.4      F
+ 2: 1        n, Exponent of 10
+ 3: 75       Z Loc [ Exponent1 ]
+
+102:  Z=F x 10^n (P30)
+ 1: .025     F
+ 2: 1        n, Exponent of 10
+ 3: 76       Z Loc [ Exponent2 ]
+
+103:  Z=X^Y (P47)
+ 1: 70       X Loc [ SB_Temp_K ]
+ 2: 75       Y Loc [ Exponent1 ]
+ 3: 77       Z Loc [ 1_SB_4Pow ]
+
+104:  Z=X*Y (P36)
+ 1: 72       X Loc [ mV_tpile  ]
+ 2: 73       Y Loc [ m_slope   ]
+ 3: 78       Z Loc [ 2_mVxm    ]
+
+105:  Z=X+Y (P33)
+ 1: 77       X Loc [ 1_SB_4Pow ]
+ 2: 78       Y Loc [ 2_mVxm    ]
+ 3: 79       Z Loc [ 3_Sum1    ]
+
+106:  Z=X+Y (P33)
+ 1: 74       X Loc [ b_inter   ]
+ 2: 79       Y Loc [ 3_Sum1    ]
+ 3: 80       Z Loc [ 4_Sum2    ]
+
+107:  Z=X^Y (P47)
+ 1: 80       X Loc [ 4_Sum2    ]
+ 2: 76       Y Loc [ Exponent2 ]
+ 3: 83       Z Loc [ SurfT_C_K ]
+
+108:  Z=X+F (P34)
+ 1: 83       X Loc [ SurfT_C_K ]
+ 2: -273.15  F
+ 3: 84       Z Loc [ SurfT_C_C ]
+
+;---- Apogee SI-111 Infrared radiometer----
+; # 2362 - pointed at canopy near Forest1
+; First measure resistnce of the thermistor and calculate sensor body
+; temperature
+
+109:  AC Half Bridge (P5)
+ 1: 1        Reps
+ 2: 25       5000 mV, 60 Hz Reject, Fast Range (same as code 45)
+ 3: 9        SE Channel
+ 4: 3        Excite all reps w/Exchan 3
+ 5: 2500     mV Excitation
+ 6: 63       Loc [ mV_thrm   ]
+ 7: 1.0      Multiplier
+ 8: 0.0      Offset
+
+110:  Z=1/X (P42)
+ 1: 63       X Loc [ mV_thrm   ]
+ 2: 64       Z Loc [ 1_mV_thrm ]
+
+111:  Z=X+F (P34)
+ 1: 64       X Loc [ 1_mV_thrm ]
+ 2: -1.0     F
+ 3: 65       Z Loc [ 2_mV_thrm ]
+
+112:  Z=X*F (P37)
+ 1: 65       X Loc [ 2_mV_thrm ]
+ 2: 24900    F
+ 3: 66       Z Loc [ R_thrm    ]
+
+113:  Z=LN(X) (P40)
+ 1: 66       X Loc [ R_thrm    ]
+ 2: 67       Z Loc [ InR_thrm  ]
+
+114:  Z=X*F (P37)
+ 1: 67       X Loc [ InR_thrm  ]
+ 2: 0.001    F
+ 3: 68       Z Loc [ Scaled_R  ]
+
+115:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 68       X Loc [ Scaled_R  ]
+ 3: 69       F(X) Loc [ SH_Coeffs ]
+ 4: .001129  C0
+ 5: .234108  C1
+ 6: 0.0      C2
+ 7: 87.7547  C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+116:  Z=1/X (P42)
+ 1: 69       X Loc [ SH_Coeffs ]
+ 2: 70       Z Loc [ SB_Temp_K ]
+
+117:  Z=X+F (P34)
+ 1: 70       X Loc [ SB_Temp_K ]
+ 2: -273.15  F
+ 3: 71       Z Loc [ SB_Temp_C ]
+
+; Measure mV output of thermopile
+
+118:  Volt (Diff) (P2)
+ 1: 1        Reps
+ 2: 21       10 mV, 60 Hz Reject, Slow Range
+ 3: 6        DIFF Channel
+ 4: 72       Loc [ mV_tpile  ]
+ 5: 1.0      Multiplier
+ 6: 0.0      Offset
+
+; Calculation of m(slope) coefficient for target temperature calculation.
+; Each sensor has unique C0, C1, and C2 values on their calibration sheet.
+
+119:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 71       X Loc [ SB_Temp_C ]
+ 3: 73       F(X) Loc [ m_slope   ]
+ 4: 14222.3  C0
+ 5: 68.0776  C1
+ 6: .77405   C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+120:  Z=X*F (P37)
+ 1: 73       X Loc [ m_slope   ]
+ 2: 99999    F
+ 3: 73       Z Loc [ m_slope   ]
+
+; Calculation of b (intercept) coefficient for target calculation. Each
+; sensor has unique C values (again - on calib sheet).
+
+121:  Polynomial (P55)
+ 1: 1        Reps
+ 2: 71       X Loc [ SB_Temp_C ]
+ 3: 74       F(X) Loc [ b_inter   ]
+ 4: -72.4861 C0
+ 5: -2.25549 C1
+ 6: 0.24962  C2
+ 7: 0.0      C3
+ 8: 0.0      C4
+ 9: 0.0      C5
+
+122:  Z=X*F (P37)
+ 1: 74       X Loc [ b_inter   ]
+ 2: 99999    F
+ 3: 74       Z Loc [ b_inter   ]
+
+; Target temperature calculation based on m and b coefficients.
+
+
+123:  Z=F x 10^n (P30)
+ 1: 0.4      F
+ 2: 1        n, Exponent of 10
+ 3: 75       Z Loc [ Exponent1 ]
+
+124:  Z=F x 10^n (P30)
+ 1: .025     F
+ 2: 1        n, Exponent of 10
+ 3: 76       Z Loc [ Exponent2 ]
+
+125:  Z=X^Y (P47)
+ 1: 70       X Loc [ SB_Temp_K ]
+ 2: 75       Y Loc [ Exponent1 ]
+ 3: 77       Z Loc [ 1_SB_4Pow ]
+
+126:  Z=X*Y (P36)
+ 1: 72       X Loc [ mV_tpile  ]
+ 2: 73       Y Loc [ m_slope   ]
+ 3: 78       Z Loc [ 2_mVxm    ]
+
+127:  Z=X+Y (P33)
+ 1: 77       X Loc [ 1_SB_4Pow ]
+ 2: 78       Y Loc [ 2_mVxm    ]
+ 3: 79       Z Loc [ 3_Sum1    ]
+
+128:  Z=X+Y (P33)
+ 1: 74       X Loc [ b_inter   ]
+ 2: 79       Y Loc [ 3_Sum1    ]
+ 3: 80       Z Loc [ 4_Sum2    ]
+
+129:  Z=X^Y (P47)
+ 1: 80       X Loc [ 4_Sum2    ]
+ 2: 76       Y Loc [ Exponent2 ]
+ 3: 85       Z Loc [ CanT_K    ]
+
+130:  Z=X+F (P34)
+ 1: 85       X Loc [ CanT_K    ]
+ 2: -273.15  F
+ 3: 86       Z Loc [ CanT_C    ]
+
+;---- HMP45A RH/T sensor ----
+;
+131:  Do (P86)
+ 1: 49       Turn On Switched 12V
+
+; Stabilize sensor
+132:  Delay w/Opt Excitation (P22)
+ 1: 1        Ex Channel
+ 2: 0        Delay W/Ex (0.01 sec units)
+ 3: 15       Delay After Ex (0.01 sec units)
+ 4: 0        mV Excitation
+
+; Measure temperature
+133:  Volt (SE) (P1)
+ 1: 1        Reps
+ 2: 24       1000 mV, 60 Hz Reject, Slow Range
+ 3: 13       SE Channel
+ 4: 87       Loc [ AirT_For  ]
+ 5: 0.1      Multiplier
+ 6: -40      Offset
+
+; Measure relative humidity
+134:  Volt (SE) (P1)
+ 1: 1        Reps
+ 2: 24       1000 mV, 60 Hz Reject, Slow Range
+ 3: 14       SE Channel
+ 4: 88       Loc [ RH_For    ]
+ 5: 0.1      Multiplier
+ 6: 0.0      Offset
+
+; turn off sensor
+135:  Do (P86)
+ 1: 59       Turn Off Switched 12V
+
+;-----Met-One windset - wind speed and direction-----
+
+136:  Pulse (P3)
+ 1: 1        Reps
+ 2: 1        Pulse Channel 1
+ 3: 22       Switch Closure, Output Hz
+ 4: 89       Loc [ WS_For_ms ]
+ 5: .799     Multiplier
+ 6: .2811    Offset
+
+
+137:  If (X<=>F) (P89)
+ 1: 89       X Loc [ WS_For_ms ]
+ 2: 1        =
+ 3: .2811    F
+ 4: 30       Then Do
+
+     138:  Z=F x 10^n (P30)
+      1: 0        F
+      2: 0        n, Exponent of 10
+      3: 89       Z Loc [ WS_For_ms ]
+
+139:  End (P95)
+
+140:  AC Half Bridge (P5)
+ 1: 1        Reps
+ 2: 25       5000 mV, 60 Hz Reject, Fast Range (same as code 45)
+ 3: 15       SE Channel
+ 4: 4        Excite all reps w/Exchan 4
+ 5: 5000     mV Excitation
+ 6: 90       Loc [ WDir_For  ]
+ 7: 712      Multiplier
+ 8: 0.0      Offset
+
+141:  If (X<=>F) (P89)
+ 1: 90       X Loc [ WDir_For  ]
+ 2: 3        >=
+ 3: 360      F
+ 4: 30       Then Do
+
+     142:  Z=F x 10^n (P30)
+      1: 0        F
+      2: 0        n, Exponent of 10
+      3: 90       Z Loc [ WDir_For  ]
+
+143:  End (P95)
+
+; -----Write Data to Final Storage every 30 min-----
+
+144:  If time is (P92)
+ 1: 0        Minutes (Seconds --) into a
+ 2: 30       Interval (same units as above)
+ 3: 10       Set Output Flag High (Flag 0)
+
+145:  Set Active Storage Area (P80)^4889
+ 1: 1        Final Storage Area 1
+ 2: 1        Array ID
+
+146:  Resolution (P78)
+ 1: 0        Low Resolution
+
+147:  Real Time (P77)^13262
+ 1: 1110     Year,Day,Hour/Minute (midnight = 0000)
+
+148:  Average (P71)^25120
+ 1: 1        Reps
+ 2: 1        Loc [ batt_volt ]
+
+149:  Average (P71)^5738
+ 1: 1        Reps
+ 2: 2        Loc [ panelT    ]
+
+150:  Average (P71)^4500
+ 1: 18       Reps
+ 2: 3        Loc [ P1_5_1    ]
+
+151:  Average (P71)^7881
+ 1: 6        Reps
+ 2: 27       Loc [ P2_5_SM   ]
+
+152:  Average (P71)^15445
+ 1: 18       Reps
+ 2: 33       Loc [ P5_5_1    ]
+
+153:  Average (P71)^13951
+ 1: 6        Reps
+ 2: 57       Loc [ P6_5_SM   ]
+
+154:  Average (P71)^29314
+ 1: 1        Reps
+ 2: 82       Loc [ SurfT_T_C ]
+
+155:  Average (P71)^29457
+ 1: 1        Reps
+ 2: 84       Loc [ SurfT_C_C ]
+
+156:  Average (P71)^1649
+ 1: 1        Reps
+ 2: 86       Loc [ CanT_C    ]
+
+157:  Average (P71)^14496
+ 1: 4        Reps
+ 2: 87       Loc [ AirT_For  ]
+
+158:  Wind Vector (P69)^30082
+ 1: 1        Reps
+ 2: 0        Samples per Sub-Interval
+ 3: 0        S, theta(1), sigma(theta(1)) with polar sensor
+ 4: 89       Wind Speed/East Loc [ WS_For_ms ]
+ 5: 90       Wind Direction/North Loc [ WDir_For  ]
+
+*Table 2 Program
+  02: 0.0000    Execution Interval (seconds)
+
+*Table 3 Subroutines
+
+End Program
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-Input Locations-
+1 batt_volt 1 1 1
+2 panelT    1 1 1
+3 P1_5_1    1 2 1
+4 P1_5_2    1 1 0
+5 P1_5_3    1 1 0
+6 P1_20_1   1 1 0
+7 P1_20_2   1 1 0
+8 P1_20_3   1 1 0
+9 P1_60_1   1 1 0
+10 P1_60_2   1 1 0
+11 P1_60_3   1 1 0
+12 P3_5_1    1 1 0
+13 P3_5_2    1 1 0
+14 P3_5_3    1 1 0
+15 P3_20_1   1 1 0
+16 P3_20_2   1 1 0
+17 P3_20_3   1 1 0
+18 P3_60_1   1 1 0
+19 P3_60_2   1 1 0
+20 P3_60_3   1 1 0
+21 Period1   1 1 1
+22 Period2   1 1 0
+23 Period3   1 1 0
+24 Period4   1 1 1
+25 Period5   17 1 0
+26 Period6   5 0 1
+27 P2_5_SM   5 0 1
+28 P2_20_SM  1 1 1
+29 P2_60_SM  1 1 1
+30 P4_5_SM   1 1 1
+31 P4_20_SM  1 1 1
+32 P4_60_SM  1 1 1
+33 P5_5_1    1 2 1
+34 P5_5_2    1 1 0
+35 P5_5_3    1 1 0
+36 P5_20_1   1 1 0
+37 P5_20_2   1 1 0
+38 P5_20_3   1 1 0
+39 P5_60_1   1 1 0
+40 P5_60_2   1 1 0
+41 P5_60_3   1 1 0
+42 P7_5_1    1 1 0
+43 P7_5_2    1 1 0
+44 P7_5_3    1 1 0
+45 P7_20_1   1 1 0
+46 P7_20_2   1 1 0
+47 P7_20_3   1 1 0
+48 P7_60_1   1 1 0
+49 P7_60_2   1 1 0
+50 P7_60_3   1 1 0
+51 Period7   5 1 1
+52 Period8   17 1 0
+53 Period9   1 1 1
+54 Period10  1 1 0
+55 Period11  1 1 0
+56 Period12  1 1 0
+57 P6_5_SM   5 1 1
+58 P6_20_SM  17 1 1
+59 P6_60_SM  5 1 1
+60 P8_5_SM   9 1 1
+61 P8_20_SM  9 1 1
+62 P8_60_SM  17 1 1
+63 mV_thrm   1 3 3
+64 1_mV_thrm 1 3 3
+65 2_mV_thrm 1 3 3
+66 R_thrm    1 3 3
+67 InR_thrm  1 3 3
+68 Scaled_R  1 3 3
+69 SH_Coeffs 1 3 3
+70 SB_Temp_K 1 6 3
+71 SB_Temp_C 1 6 3
+72 mV_tpile  1 3 3
+73 m_slope   1 6 6
+74 b_inter   1 6 6
+75 Exponent1 1 3 3
+76 Exponent2 1 3 3
+77 1_SB_4Pow 1 3 3
+78 2_mVxm    1 3 3
+79 3_Sum1    1 3 3
+80 4_Sum2    1 3 3
+81 SurfT_T_K 1 1 1
+82 SurfT_T_C 1 1 1
+83 SurfT_C_K 1 1 1
+84 SurfT_C_C 1 1 1
+85 CanT_K    1 1 1
+86 CanT_C    1 1 1
+87 AirT_For  5 1 1
+88 RH_For    9 1 1
+89 WS_For_ms 9 3 2
+90 WDir_For  17 3 2
+-Program Security-
+0000
+0000
+0000
+-Mode 4-
+-Final Storage Area 2-
+0
+-CR10X ID-
+0
+-CR10X Power Up-
+3
+-CR10X Compile Setting-
+3
+-CR10X RS-232 Setting-
+-1
+-DLD File Labels-
+0
+-Final Storage Labels-
+0,1,4889
+1,Year_RTM,13262
+1,Day_RTM
+1,Hour_Minute_RTM
+2,P1_5_1_AVG~3,4500
+2,P1_5_2_AVG~4
+2,P1_5_3_AVG~5
+2,P1_20_1_AVG~6
+2,P1_20_2_AVG~7
+2,P1_20_3_AVG~8
+2,P1_60_1_AVG~9
+2,P1_60_2_AVG~10
+2,P1_60_3_AVG~11
+2,P3_5_1_AVG~12
+2,P3_5_2_AVG~13
+2,P3_5_3_AVG~14
+2,P3_20_1_AVG~15
+2,P3_20_2_AVG~16
+2,P3_20_3_AVG~17
+2,P3_60_1_AVG~18
+2,P3_60_2_AVG~19
+2,P3_60_3_AVG~20
+3,panelT_AVG~2,5738
+4,batt_volt_AVG~1,25120
+5,P2_5_SM_AVG~27,7881
+5,P2_20_SM_AVG~28
+5,P2_60_SM_AVG~29
+5,P4_5_SM_AVG~30
+5,P4_20_SM_AVG~31
+5,P4_60_SM_AVG~32
+6,P5_5_1_AVG~33,15445
+6,P5_5_2_AVG~34
+6,P5_5_3_AVG~35
+6,P5_20_1_AVG~36
+6,P5_20_2_AVG~37
+6,P5_20_3_AVG~38
+6,P5_60_1_AVG~39
+6,P5_60_2_AVG~40
+6,P5_60_3_AVG~41
+6,P7_5_1_AVG~42
+6,P7_5_2_AVG~43
+6,P7_5_3_AVG~44
+6,P7_20_1_AVG~45
+6,P7_20_2_AVG~46
+6,P7_20_3_AVG~47
+6,P7_60_1_AVG~48
+6,P7_60_2_AVG~49
+6,P7_60_3_AVG~50
+7,P6_5_SM_AVG~57,13951
+7,P6_20_SM_AVG~58
+7,P6_60_SM_AVG~59
+7,P8_5_SM_AVG~60
+7,P8_20_SM_AVG~61
+7,P8_60_SM_AVG~62
+8,SurfT_T_C_AVG~82,29314
+9,SurfT_C_C_AVG~84,29457
+10,CanT_C_AVG~86,1649
+11,AirT_For_AVG~87,14496
+11,RH_For_AVG~88
+11,WS_For_ms_AVG~89
+11,WDir_For_AVG~90
+12,WS_For_ms_S_WVT~89,30082
+12,WDir_For_D1_WVT~90
+12,WDir_For_SD1_WVT~90
