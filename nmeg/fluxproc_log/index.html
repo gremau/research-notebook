@@ -1,0 +1,6689 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Gregory E. Maurer">
+      
+      
+        <link rel="canonical" href="https://greg.pronghorns.net/research-notebook/nmeg/fluxproc_log/">
+      
+      
+        <link rel="prev" href="../fluxall_qc_pseudocode/">
+      
+      
+        <link rel="next" href="../fluxproc_notes/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../img/flask-outline.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>NMEG flux processing log - Research Notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="lime" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#nmeg-flux-processing-log" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Research Notebook" class="md-header__button md-logo" aria-label="Research Notebook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57L13 8.35V4h-2v4.35L5.18 18.43c-.11.16-.18.36-.18.57m1 3a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm7-6 1.34-1.34L16.27 18H7.73l2.66-4.61zm-.5-4a.5.5 0 0 1 .5.5.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Research Notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              NMEG flux processing log
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gremau/research-notebook" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Research Notebook" class="md-nav__button md-logo" aria-label="Research Notebook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57L13 8.35V4h-2v4.35L5.18 18.43c-.11.16-.18.36-.18.57m1 3a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm7-6 1.34-1.34L16.27 18H7.73l2.66-4.61zm-.5-4a.5.5 0 0 1 .5.5.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5"/></svg>
+
+    </a>
+    Research Notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gremau/research-notebook" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topicindex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Active research projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/awk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AWK Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/data_analysis_workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow for data analysis (Greg)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/debian_config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DebianConf.markdown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/geospatial_tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geospatial data tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Version control with Git
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/ipython/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IPython
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/latex_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LaTeX notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/matlab_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matlab notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/mercurial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Version control with Mercurial
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/numpy_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NumPy notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/pandoc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pandoc
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/programming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data analysis programming: general info
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/python_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/r_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/sandboxing_ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sandboxing AI agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/sensordata_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes on working with sensor data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/shellscripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shell scripting notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/textfiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Text files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/transition2markdown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrating from Dokuwiki to markdown pages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computing/vim_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data and models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Data and models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_and_models/MsTMIP_reanalysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MsTMIP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_and_models/century_soil/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Century Soil Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_and_models/hdf_ncdf_files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using HDF and NetCDF files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_and_models/modis_NDVI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODIS NDVI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_and_models/modis_NPP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODIS NPP (MOD17)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_and_models/northam_climate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interesting or useful climate data for North America
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_and_models/soil_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soil data sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hiddencanyon
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hiddencanyon
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/analysislog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden Canyon data analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/communicationsystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Communications system at Hidden Canyon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/dataloggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden Canyon dataloggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/fieldwork_log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden Canyon Logbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/litterbaglog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Litterbaglog 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/mettowers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden Canyon towers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden Canyon ecohydrology experiments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/programdocs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program documentation for Hidden Canyon data analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/sitedescription/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden Canyon (Wasatch Mtns, UT)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/snowmeltdesign/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snowmeltdesign
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/snowmeltlog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring 2010 snowmelt log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/soilprofiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soilprofiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/soilresplog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2010 Soil Respiration measurements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/trees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hiddencanyon/westerndust/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Westerndust
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instruments
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Instruments
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instruments/cr10dataloggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Campbell CR10 dataloggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instruments/ea-irms_sirfer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EA-IRMS analysis at SIRFER (U of U)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instruments/li-190/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Li-Cor LI-190 PPFD sensors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instruments/li-6400/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Li-Cor 6400 with Soil Respiration Chamber
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instruments/sdi12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using SDI12 sensors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instruments/sentek_enviroscan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sentek EnviroSCAN profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instruments/vaisala_gmp252/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vaisala GMP 252 CO~2~ probe
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/anova/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis of Variance (ANOVA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/correlation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Correlation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/decay_turnover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decay, turnover, and residence time of pools of stuff
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/linear_regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/multilevel_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multilevel models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/normalitytests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing for Normality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/pca/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Principal components analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/timeseries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time series analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/toolboxes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math and statistics toolboxes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Niwot girdling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Niwot girdling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../niwot_girdling/activitylog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Niwot Girdling Activity log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../niwot_girdling/data_qc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Niwot/Fraser girdling study data QC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../niwot_girdling/labeldecomp_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labeldecomp overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../niwot_girdling/soilanalysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soil analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nmeg
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Nmeg
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fluxall_qc_pseudocode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudocode for new fluxall qc processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NMEG flux processing log
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NMEG flux processing log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ameriflux-data-submissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AmeriFlux data submissions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bad-irga-0922" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bad IRGA - #0922
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2007-and-2008-qc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2007 and 2008 QC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drought-and-info-flow-papers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drought and Info-flow papers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Drought and Info-flow papers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#drought" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drought
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#info-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Info-flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pj_girdle-2009" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ_girdle 2009
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioning-type-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitioning type analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-when-datalogger-clocks-are-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens when datalogger clocks are reset?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What happens when datalogger clocks are reset?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-min-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30 min data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-hz-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10 hz data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-20
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-14
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-10
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-09" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-09
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ameriflux-qc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ameriflux QC
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ameriflux QC">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pj_girdle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ_girdle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ppine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PPine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new_gland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New_GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jsav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSav
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-03-31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-03-31
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2015-03-31">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problem-with-pj-data-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problem with PJ data card?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem-at-gland-and-new_gland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problem at GLand and New_GLand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#par-at-gland-and-sland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PAR at GLand and SLand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filling-data-for-2009-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filling data for 2009-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filling data for 2009-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pjc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pj_girdle_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ_girdle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcon_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gland_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new_gland_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New_GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sland_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jsav_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSav
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ppine_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PPine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-12-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-12-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-11-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-11-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-5-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-5-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-27-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-27-2015
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2-27-2015">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#timing-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timing issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10hz-data-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10hz data processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-25-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-25-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-22-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-22-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-20-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-20-2015
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2-20-2015">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#investigating-time-shifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigating time shifts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-way-it-was-done-by-timrandy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The way it was done by Tim/Randy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-17-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-17-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-11-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-11-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-16-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1-16-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-8-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1-8-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-5-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1-5-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-18-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-18-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-11-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-11-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-8-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-8-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-5-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-5-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-4-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-4-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-2-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-2-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-25-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-25-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-24-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-24-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-20-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-20-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-16-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-16-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11-16-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unfilled-fluxes-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unfilled fluxes are:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gapfilled-fluxes-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gapfilled fluxes are:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partitioned-fluxes-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitioned fluxes are:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recalculations-to-nee-gpp-and-re-to-ensure-carbon-balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recalculations to NEE, GPP and RE to ensure carbon balance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-12-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-12-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-10-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-10-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-07-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-07-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-06-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-06-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-05-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-05-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-04-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-04-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-03-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-03-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-31-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-31-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-29-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-29-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-28-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-28-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10-28-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gap-filling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap filling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-24-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-24-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10-24-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps-to-create-new-toa5-files-from-wireless-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps to create new TOA5 files from wireless data.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps-to-create-new-tob1-files-from-wireless-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps to create new TOB1 files from wireless data.
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-22-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-22-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-15-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-15-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#08-29-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        08-29-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#08-27-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        08-27-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fluxproc_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NMEG flux processing workflow (MATLAB version)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fluxproc_priorities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NMEG FluxProc Priorities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../removebaddata_primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoveBadData.m primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../soilsensor_history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Site soil sensor histories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Procedures
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Procedures
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/14c_graphitization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14c graphitization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/belowsnow_soilresp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Below-snow soil respiration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/canopyphotos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hemispherical canopy photos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/dustonsnow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snowmelt acceleration by dust deposition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/ea-irms_soilprep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soil sample prep for EA-IRMS analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/exetainer_co2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exetainer Injection Method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/gps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Georeferencing with GPS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/leafarea/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Leaf Area Index
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/litterbags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Litterbags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/manual_soilresp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld soil respiration measurements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/snowpackdustloading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measuring snowpack dust-loading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/soilacidtreatment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acid-washing soils to remove carbonates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/soilextract_13c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    δ13C analysis of soil extracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/treecores/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Laboratory mounting of tree cores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../procedures/xylempressure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measuring Xylem Water Potential
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redbutte
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Redbutte
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../redbutte/weather_log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Weather log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../redbutte/weatherstations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Red Butte Canyon Weather Stations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    snotelC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    snotelC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../snotelC/fieldprotocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SNOTEL site sampling procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../snotelC/log1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../snotelC/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../snotelC/sampleprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab processing of SNOTEL site samples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../snotelC/sampleprocessinglog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sampleprocessinglog 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../snotelC/sampletables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SNOTEL survey sample tracking tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soilclim
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Soilclim
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soilclim/analysislog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soil temperature analysis log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soilclim/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Western U.S. NRCS data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soilclim/data_qc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data quality control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soilclim/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Western U.S. snowpacks, soils, and climate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soilclim/programdocs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program documentation for western U.S. station data analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soilclim/publicationoutline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publicationoutline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soilclim/statistics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SNOTEL soil climate statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wasatchsnowdep
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wasatchsnowdep
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasatchsnowdep/activitylog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2010-11 Snow Deposition Project Activity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasatchsnowdep/analysislog_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysislog 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasatchsnowdep/labprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snow sample lab processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasatchsnowdep/sampling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sampling ion and dust deposition in snow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wasatchsnowdep/standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mixing standards for ion analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ameriflux-data-submissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AmeriFlux data submissions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bad-irga-0922" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bad IRGA - #0922
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2007-and-2008-qc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2007 and 2008 QC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drought-and-info-flow-papers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drought and Info-flow papers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Drought and Info-flow papers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#drought" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drought
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#info-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Info-flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pj_girdle-2009" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ_girdle 2009
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioning-type-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitioning type analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-when-datalogger-clocks-are-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens when datalogger clocks are reset?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What happens when datalogger clocks are reset?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-min-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30 min data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-hz-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10 hz data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-20
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-14
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-10
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-04-09" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-04-09
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ameriflux-qc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ameriflux QC
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ameriflux QC">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pj_girdle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ_girdle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ppine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PPine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new_gland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New_GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jsav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSav
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2015-03-31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2015-03-31
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2015-03-31">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problem-with-pj-data-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problem with PJ data card?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem-at-gland-and-new_gland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problem at GLand and New_GLand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#par-at-gland-and-sland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PAR at GLand and SLand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filling-data-for-2009-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filling data for 2009-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filling data for 2009-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pjc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pj_girdle_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PJ_girdle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcon_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gland_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new_gland_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New_GLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sland_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jsav_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSav
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ppine_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PPine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-12-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-12-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-11-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-11-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-5-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-5-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-27-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-27-2015
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2-27-2015">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#timing-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timing issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10hz-data-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10hz data processing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-25-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-25-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-22-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-22-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-20-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-20-2015
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2-20-2015">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#investigating-time-shifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigating time shifts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-way-it-was-done-by-timrandy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The way it was done by Tim/Randy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-17-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-17-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-11-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2-11-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-16-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1-16-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-8-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1-8-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-5-2015" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1-5-2015
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-18-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-18-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-11-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-11-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-8-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-8-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-5-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-5-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-4-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-4-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-2-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12-2-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-25-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-25-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-24-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-24-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-20-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-20-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-16-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-16-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11-16-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unfilled-fluxes-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unfilled fluxes are:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gapfilled-fluxes-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gapfilled fluxes are:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partitioned-fluxes-are" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitioned fluxes are:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recalculations-to-nee-gpp-and-re-to-ensure-carbon-balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recalculations to NEE, GPP and RE to ensure carbon balance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-12-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-12-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-10-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-10-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-07-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-07-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-06-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-06-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-05-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-05-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-04-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-04-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-03-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-03-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-31-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-31-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-29-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-29-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-28-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-28-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10-28-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gap-filling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap filling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-24-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-24-2014
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10-24-2014">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps-to-create-new-toa5-files-from-wireless-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps to create new TOA5 files from wireless data.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps-to-create-new-tob1-files-from-wireless-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps to create new TOB1 files from wireless data.
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-22-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-22-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-15-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10-15-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#08-29-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        08-29-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#08-27-2014" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        08-27-2014
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="nmeg-flux-processing-log">NMEG flux processing log</h1>
+<h2 id="ameriflux-data-submissions">AmeriFlux data submissions</h2>
+<p>2007-2014 are submitted and in review, and we think these data may make it into the FLUXNET2015 data release.</p>
+<h2 id="the-bad-irga-0922">The bad IRGA - #0922</h2>
+<p>Bai Yang originally brought to my attention the fact that there were higher H2O concentrations at PJ control in 2014 than in earlier years ( by about 5-10%. Upon investigation I noticed that the timing of these higher than normal values roughly coincided with the period that a specific IRGA (ser# 0922) was installed at the site (5/2/2014 to 10/31/2014). This IRGA was subsequently installed at</p>
+<ul>
+<li>PJ_girdle from 2014/11/7 to 2015/1/23</li>
+<li>PPine from 2015/2/17 to 2015/8/18, checked agc at this time and it was ok</li>
+</ul>
+<p>Later investigation by Steven indicated that this IRGA was not holding its calibration well, so we sent the IRGA back to LiCor. I don't think the data need to be corrected, however. There appears to be a similar pattern in atmospheric H2O concentration observed at PJ_girdle during the 2013-2014 growing seasons (low in 2013, higher by a similar amount in 2014). So, though the data may be slightly more noise in 2014 due to the calibration problem, there doesn't appear to be a level shift that needs to be corrected for this IRGA.</p>
+<h2 id="2007-and-2008-qc">2007 and 2008 QC</h2>
+<p>GLand and SLand done </p>
+<h2 id="drought-and-info-flow-papers">Drought and Info-flow papers</h2>
+<h3 id="drought">Drought</h3>
+<ul>
+<li>Sites are arranged along an elevation/water availability gradient. It follows that drought severity and ecosystem response is higher at low elevation.<ul>
+<li>Rank years according to precip defecit, vpd anomaly, and other metrics along the gradient.</li>
+<li>Which are good years and which are bad relative to our measurements and according to long term mean?</li>
+<li>Need to add some metric of soil water availability</li>
+</ul>
+</li>
+<li>Quantify ecosystem response - is there a gradient of drought sensitivity among our sites?<ul>
+<li>Calculate NEE, GPP, and RECO anomaly in each year. Is this related to precip defecit, vpd anom, soil water availability?</li>
+<li>Dan's sensitivity curves (flux vs temp/vpd/etc - binned for all years and by season/year).</li>
+</ul>
+</li>
+<li>What does THE GRADIENT tell us about southwestern drought and vulnerability to drought?</li>
+</ul>
+<h3 id="info-flow">Info-flow</h3>
+<ul>
+<li>Hypothesis - Info flow between water (swc, vpd, etc) is higher at low elevation sites.<ul>
+<li>below a certain availability threshold water has little info flow to fluxes</li>
+<li>Above the water availability threshold - Tair, radiation, nutrient avail, etc contains more information.</li>
+</ul>
+</li>
+</ul>
+<h2 id="pj_girdle-2009">PJ_girdle 2009</h2>
+<ul>
+<li>
+<p>There is a correction to 2009 PJ_girdle fluxes that was developed in 2010 and has been used ever since. However, it was commented out in the code I ran to reprocess fluxes recently and this is the reason that my fluxes looked so different for this year. This correction gets applied in the UNM_flux_031010.m script. I have added the appropriate conditional statments to make it run whenever this script is run for PJ_girdle prior to Sept 1 2009.</p>
+</li>
+<li>
+<p>That said - I think the fluxes look a little bogus with this correction. There appears to be an abnormally high amount of CO2 uptake early in 2009. Just a feeling, but maybe the data prior to about April 20 does not need any correction.</p>
+</li>
+</ul>
+<h2 id="partitioning-type-analysis">Partitioning type analysis</h2>
+<p>See the IPy notebook. Several sites have strange issues with partitioned fluxes</p>
+<h2 id="what-happens-when-datalogger-clocks-are-reset">What happens when datalogger clocks are reset?</h2>
+<p>Periodically we have to reset our datalogger clocks. We are curious about what happens to the data logged when this occurs.</p>
+<h3 id="30-min-data">30 min data</h3>
+<ul>
+<li>Data is collected as normal, and the observations stored in the internal table in the datalogger either are missing timestamps or have duplicate timestamps.</li>
+<li>Consequently, during the half hour period during which the clock is changed a larger or smaller number of observations is used to derive each 30 min value in the output table.</li>
+<li>The sign of the change in observations  depends on whether the datalogger time was moved forward (fewer observations) or back (more observations).</li>
+<li>This can be seen in the <code>n_Tot</code> column in the TOA5 file. A normal half hour period with no clock change has 18,000 observations.</li>
+</ul>
+<h3 id="10-hz-data">10 hz data</h3>
+<ul>
+<li>Again, data is collected as normal in the datalogger table, which may mean not all timestamps are present in the observations, or some timestamps are duplicated.</li>
+<li>All observations are present in the 10hz output table (TOB1 file).</li>
+<li>When 10hz data are processed into 30 min fluxes, the <code>iok</code> variable indicates how many 10hz observations were used to calculate the flux. This value fluctuates up or down during the 30 min clock reset period.</li>
+</ul>
+<h2 id="2015-04-20">2015-04-20</h2>
+<ol>
+<li>Moved all 8100 data from Sandia and consolidated files from PJ and PJG folders into one - <code>PJX_all8100data</code>. A few of the testing folders on the ftp might still have different files (did not overwrite).</li>
+</ol>
+<h2 id="2015-04-14">2015-04-14</h2>
+<p>In the last couple days I have:</p>
+<ol>
+<li>Created new issue trackers for all sites and shared them with the lab.</li>
+<li>Created an always-up-to-date tutorial for people using processed data.</li>
+<li>
+<p>Figured out how to create new daily files from the ameriflux files I have made</p>
+<ul>
+<li>
+<p>This involves creating an "aggregator" object for the site, then writing a file from it:</p>
+<pre><code>agg = UNM_Ameriflux_daily_aggregator(UNM_sites.JSav);
+agg.write_daily_file();
+</code></pre>
+</li>
+<li>
+<p>The aggregator output is dependent on the files it finds  in $FLUXROOT$/Ameriflux_files</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="2015-04-10">2015-04-10</h2>
+<p>This has been put in the issue tracker spreadsheets</p>
+<p>Looking at results from MPI gapfiller/partitioner.</p>
+<ul>
+<li>JSav 2014 is terrible - fluxes are bad and there are SWin spikes.</li>
+<li>GLand 2009 looks bad - Lots of missing fluxes and LE filling looks bad  - maybe there is a bad met stream?</li>
+<li>MCon 2009, 2010, and 2012 SWin looks bad - see note below about met gapfilling.</li>
+<li>PPine SWin also looks bad early and late in year - appears related to met gapfilling.  I think most of this gapfilling is unnecessary... related to mysterious end of year radiation removal.</li>
+<li>PPine flux fingerprints, especially LE,  are a little wide after gapfilling also - maybe related to radiation?</li>
+<li>Of course 2013 gapfilling at MCon and PPine sucks...</li>
+</ul>
+<h2 id="2015-04-09">2015-04-09</h2>
+<p>This has been put in the issue tracker spreadsheets</p>
+<p>Gapfilled Met data for GLand, SLand, New_GLand, PJ, PJ_girdle, and JSav 2009:2014</p>
+<ul>
+<li>Need to look at PPine gapfilling - precip units are wierd, we must have some RH, and SWin filling is a little lower than ours.<ul>
+<li>There also appears to be a timeshift/tilt issue in 2009</li>
+</ul>
+</li>
+<li>PJ sites were filled with bad PPFD values from JSav in 2014.</li>
+<li>MCon 2014 precip gauge data reads 0 for the 1st half of year, so it is not gapfilled. Need to change this.</li>
+<li>First 100 days at SLand in 2014 probably need to be set to NaN and filled in (no precip).</li>
+<li>Radiation filling at MCon is bad, it looks ok in a timeseries but the sensor is tilted/shifted - see early 2009 data. Also, not sure why it is filling SWin at the end of the year... raw data looks ok there.</li>
+</ul>
+<h2 id="ameriflux-qc">Ameriflux QC</h2>
+<p>This has been put in the issue tracker spreadsheets</p>
+<h3 id="pj">PJ</h3>
+<ul>
+<li>2009: Big precip events days 250-255.</li>
+<li>2011: Fc noisy in Dec. due to IRGA issues</li>
+<li>2012: Fc noisy in Jan. due to IRGA issues</li>
+<li>2013: SWin gap in middle of summer.</li>
+<li>2014: PAR drops significantly around day 168. Gapfilling from JSav this year is bad.</li>
+</ul>
+<h3 id="pj_girdle">PJ_girdle</h3>
+<ul>
+<li>2009: Precip data missing at start of year, but it appears to be NaN (not zero) so it should be gapfilled. RH missing early in year.</li>
+<li>2010: Something strange with PPFD in mid summer (2 sensors maybe?).</li>
+<li>2011: Good</li>
+<li>2012: Large gap days 300-339</li>
+<li>2013: SWin a little high early and late in year</li>
+<li>2014: Big PPFD drops between days 50 and 75. IRGA change and big [CO2] drops between days 112-130 - it looks to me like this  negatively impacts Fc (false uptake?). Code removes this now. SWin a little high early and late in year. Gapfilling from JSav this year is bad.</li>
+</ul>
+<h3 id="mcon">MCon</h3>
+<ul>
+<li>2009: No SWin until May, then it seems a little high. No precip data.</li>
+<li>2010: No PPFD until August, and SWin looks high. Precip starts around day 280. RH looks bad in first half of year. There is something funny with Fc (or maybe just less noisy than usual) and perhaps datalogger timing in Nov-Dec (Day 300 on look strange).</li>
+<li>2011: SWin a little high. Maybe a slight timing issue in Jan (related to end of year 2010?). Noisy Fc data at end of year - check for IRGA change.</li>
+<li>2012: Datalogger times were a total mess this year. Looks somewhat better, but the CNR1 was tilted. SWin a little high. Huge precip event around day 75. Fc is very noisy at the beginning and end of the year and there are some high IRGA CO2 values here (cold weather problems?).</li>
+<li>2013: CNR1 tilted and small datalogger time reset in Jan-Feb. Sensor was probably leveled in late March? SWin still high. Fire wiped out most of year. No precip after fire.</li>
+<li>2014: Clock shift. Precip missing until day 184. SWin is too high. No RH.</li>
+</ul>
+<h3 id="ppine">PPine</h3>
+<p>Pay attention to sketchy normalization steps with PPine respiration - setting CO2 limits results in unexpected behavior.</p>
+<ul>
+<li>2009: SWin is strange up to mid-May. PPFD a little low until it drops to 0 on day 318. No precip data. Period of bad Fc (removed) days 151-183, but bad LE and HS are not removed at this time.</li>
+<li>2010: PPFD and SWin drop to 0 on day 318 again. Precip data starts day 236.</li>
+<li>2011: PPFD and SWin drop to 0 on day 318 again (WTF???) must be some kind of cutoff coded somewhere? No RH data.</li>
+<li>2012: No RH data. Same PPFD/SWin day 318 problem.</li>
+<li>2013: Clock reset for small period in late Nov. No good PPFD or SWin. No RH data.</li>
+<li>2014: Clock reset in middle of summer. No RH.</li>
+</ul>
+<h3 id="new_gland">New_GLand</h3>
+<ul>
+<li>2010: Clock reset June 27. No PPFD until day 85. Scattered low [CO2] at various periods - seems to be coincident with rain - removing some higher resp pulses.</li>
+<li>2011: Power outages in July? SWin is too low. Precip seems a little low - winter/spring storm amounts are lower than at GLand and New_Gland is missing an event on day 100 that is present at GLand .</li>
+<li>2012: PPFD is too high in Nov &amp; Dec. SWin is too low.</li>
+<li>2013: SWin too low. Precip has one unbelievably large event (25mm). May have missed events at days ~135 and 160 that happened at GLand. Funny PPFD calibration starting day 250.</li>
+<li>2014: SWin still low to approx. day 18. Missing precip to Apr 2 - make sure it is filled - CHECKED - it is.</li>
+</ul>
+<h3 id="sland">SLand</h3>
+<ul>
+<li>2009: SWin is too high. PAR is messed up. Fc looks pretty good and there arent many coarse filters applied.</li>
+<li>2010: Generally pretty good.</li>
+<li>2011: PPFD disappears around day 160. Precip may have a problem - there are fewer precip events than GLand and old code used to remove data.</li>
+<li>2012: Pretty good.</li>
+<li>2013: Possibly some funny SWin at the end of the year - possibly related to a header change (non-Tcor to Tcor?)</li>
+<li>2014: Jan Rg data looks too high (see not above). PAR sensor change in May and large PPFD spike days 257-267. Missing early year Precip followed by huge event on day 92.</li>
+</ul>
+<h3 id="gland">GLand</h3>
+<p>Shifted everything 1.5 hours</p>
+<ul>
+<li>2009: PPFD data needs major attention. Gaps in flux data days 26-52 and 295-332. We could consider filling these with 30 min data (if available) or other site data (suspect this was done in the past).</li>
+<li>2010: PPFD is crazy high, but then gets normalized. Big gaps in flux data days 100-119 and 295-327 -- Fill? IRGA calibration looks terrible this year. Exceptions were made for low CO2 calibration problems around days  85-99 and 152-168. Not sure if this was the right decision.</li>
+<li>2011: PPFD disappears around day 160? Gaps in 30min and flux data days 165-207 could maybe fill a little flux data in with 30min data.</li>
+<li>2012: Gap days 197-215. Crazy PPFD normalization again. Clock shift in Dec.</li>
+<li>2013: PPFD too big.</li>
+<li>2014: PPFD shifts down at around day 150 - new sensor? Bad IRGA cal period in middle of monsoon (Days 323-328) - probably should remove.</li>
+</ul>
+<h3 id="jsav">JSav</h3>
+<ul>
+<li>2009: There was a clock reset in the code, but looks like it was wrong. Days 1:65 and 140:165 are missing flux data. Might be filled with 30 min data. PPFD has some funky negative values early in year.</li>
+<li>2010: Not too many problems. Half-hour shift. Missing data between days 210 &amp; 235.</li>
+<li>2011: Days 45-52 have crazy [CO2] values.</li>
+<li>2012: Looks pretty good except for gap in flux data at end of year (fill w/ 30min?). Huge precip value around day 190.</li>
+<li>2013: Missing flux days 1-16. Funky missing flux data days 80-105. Possibly another clock shift around day 178. Huge precip event around day 214</li>
+<li>2014: Have to remove giant PPFD spike early in year. Funny high nighttime Rg early in year. RH is too high (out of cal?).</li>
+</ul>
+<h2 id="2015-03-31">2015-03-31</h2>
+<h3 id="problem-with-pj-data-card">Problem with PJ data card?</h3>
+<p>There is a funky gap between about 1/10 and 02/04 in the card data. Can't tell why yet but it seems to fill in data that is missing in the FLUXALL file/TOA5 files. Data look ok so far.</p>
+<h2 id="problem-at-gland-and-new_gland">Problem at GLand and New_GLand</h2>
+<p>Between 2014-01-17 and 2014-03-04 the datalogger program was incorrect and did not increment the CS616 measurement channel properly. This means the data files for this period are incorrect because every other sensor's column contains the data from the prior sensor in the mux measurement loop (for sensors on the same CR5000 SE channel). The program loaded on 2014-03-04 fixes this problem. This should probably be fixed in the header resolution files somehow...?</p>
+<p>Something similar happened at New_GLand between 2014-06-13 and 2014-07-11 - Fixed (card was read incorrectly as GLand).</p>
+<h2 id="par-at-gland-and-sland">PAR at GLand and SLand</h2>
+<p>During 2009 (and possibly other years) GLand and SLand had standard PAR sensors (LiCor?) and Par-Lite sensors (not sure what this is). These sensors have a fundamentally different response. Par lite data is preferred for whatever reason, so there is a script (<code>combine_PARavg_PARlite.m</code>) to use Par-Lite data when available and linearly correct the other PAR observation to this.</p>
+<h2 id="filling-data-for-2009-2014">Filling data for 2009-2014</h2>
+<h3 id="pjc">PJC</h3>
+<ul>
+<li>2009-2011 - no large gaps.</li>
+<li>2012 = TOB1 data missing on Dec 3 &amp; 4, not in wireless data.</li>
+<li>2013 and 2014 are pretty good </li>
+</ul>
+<h3 id="pj_girdle_1">PJ_girdle</h3>
+<ul>
+<li>2009: Data start February 23. Lots of gaps after this. Wireless downloads and cards do not have the data.</li>
+<li>2010 and 2011 are pretty good</li>
+<li>2012: Large gap Oct 29 to Dec 3 - not on wireless or in old card data</li>
+<li>2013 has a 6-day gap in mid August and a 2 day gap in late Nov (TOA5 and TOB1 data missing) not on wireless or in cards.</li>
+<li>2014 is pretty good </li>
+</ul>
+<h3 id="mcon_1">MCon</h3>
+<p>Earliest wireless is from Sept 2012</p>
+<ul>
+<li>2009 - 18 days of TOA5 and TOB1 data are missing at the start of the year. Can't get them off card and no wireless at this time.</li>
+<li>2010 - Card data from late-Jan to mid-March and mid-June to mid-July is corrupt and there are big gaps in TOA5 and TOB1 data here both times. This data may exist somewhere, because the old fluxall seems to have some of the february data, but I'm not sure where....</li>
+<li>2011 - is pretty good.</li>
+<li>2012: There are large gaps in TOB1 and TOA5 data between April 15 and May 11, and between June 17 and July 20 that are not fillable with card data.</li>
+<li>2013: Site down from May 3 to Nov 11 due to fire.</li>
+<li>2014 - Jun 12, 09:30 to  Jun 20, 11:00 - not sure what happened here - original TOA5 data looks like these dates were overwritten with earlier data. There were some instrument changes and new programs that may have contributed.</li>
+</ul>
+<h3 id="gland_1">GLand</h3>
+<ul>
+<li>2009: A fair amount of TOB1 data is missing - wireless downloads are unreliable this far back. A small amount of card data was repaired and filled in a couple days. In old fluxall files some of this may be filled in with either the 30 minute data or the <code>UNM_gapfill_from_local_data.m</code> script.</li>
+<li>2010 is pretty good.</li>
+<li>Large gap in June/July 2011 - was able to fill in some TOA5 data, but card and wireless ts_data files for this period are corrupt (I guess).</li>
+<li>No TOA5 data or TOB1 data to fill gaps in July/Aug 2012</li>
+<li>2013 and 2014 are good</li>
+</ul>
+<h3 id="new_gland_1">New_GLand</h3>
+<ul>
+<li>2010: Large gaps in TOA5 and TOB1 data Feb 19 to March 12 . Not fillable from card or wireless.</li>
+<li>2011: May 12 to June 22 TOB1 data is missing. Was able to rescue most of this from a corrupted card file, remaining fluxes could be filled in from TOA5 data.</li>
+<li>2012: Missing TOB1 data Aug 2-8 and TOA5 gap on the 7-8th. Filled Aug 2-7 with wireless data. TOA5 missing data seems to show the batteries or power failing in early morning hours starting in April/May.</li>
+<li>2013 &amp; 2014 are pretty good - 1-2 days TOB1 and TOA5 (contiguous) data missing</li>
+</ul>
+<h3 id="sland_1">SLand</h3>
+<ul>
+<li>2009 - All but 10 days of TOA5 data filled in</li>
+<li>2010-2012 are pretty much filled in</li>
+<li>2013 -13 day gap in August that I can't find wireless TOA5 or TOB1 data for.</li>
+<li>6 day gap in July 2014 data that I can't find wireless TOA5 or TOB1 data for.</li>
+</ul>
+<h3 id="jsav_1">JSav</h3>
+<ul>
+<li>There was no wireless at JSav prior to 2011.</li>
+<li>2009 - There is a gap in TOB1 and TOA5 data at the start of the year (Jan 1 to Feb 2nd) that I can't find or fix data for. Some of the fluxes after Jan 20 can be filled in with existing 30min data. There is also a big gap in TOB1 data from 5/21 to 6/14/2009 that could be filled in with 30 min data (TOB card data is corrupt).</li>
+<li>2010 - There is quite a bit of TOA5 and TOB1 data in August that seems to be unrecoverable.</li>
+<li>2011 - pretty good</li>
+<li>2012 - gap in fluxes at end of year that could be filled with 30 min data?</li>
+<li>2013 there are multi-day gaps in TOB1 data in March and July that cannot be found on wireless.</li>
+<li>2014 - pretty good except for two 1-day TOA5 gaps in September (not on wireless)</li>
+</ul>
+<h3 id="ppine_1">PPine</h3>
+<ul>
+<li>Don't think there is any wireless data for PPine before 2012 or maybe 2013.</li>
+<li>2009 and 2010 TOB1 data are good. There is missing TOA5 data in March/April 2010, but it appears to be related to battery/power problems at the site ( ? - short outages ).</li>
+<li>Early 2011 gaps (Jan/February) in TOB1 and TOA5 data seem to be due to faulty/corrupt cards (tried to repair but failed). Some fluxes might be fillable from TOA5 data.</li>
+<li>There was a corrupt data card in Aug 2012 that was sent to Campbell and data was returned with the wrong timestamps. This needs to be put into the fluxall files manually, but I'm not sure how to do this yet. See documentation for this card in the <code>PPine\ts_data\20_Aug_2012_PPine_tsdata</code> directory and the <code>fix_20Aug2012_PPine_card_data.m</code> script.  A couple days of TOA5 data were lost around the same time.</li>
+<li>2013 - Large gap associated with the fire (not fillable) and ~30 days of missing TOA5 and TOB1 data in late Nov through Dec that cannot be found in wireless or card data.</li>
+<li>2014 - Quite a bit of TOA5 data missing, but never for very long periods (except for 1 day in Dec that was not on wireless).</li>
+</ul>
+<h2 id="3-12-2015">3-12-2015</h2>
+<h2 id="3-11-2015">3-11-2015</h2>
+<p>Making new FLUXALL and AF files.</p>
+<ul>
+<li>Most of PJ AF files look good - but the Rg filling still needs to be fixed. Waiting for PJ_girdle to be finished first.</li>
+<li>Filling in some missing data for 2009 and 2012 at PJ_girdle.<ul>
+<li>Could not find any missing 2009 data - wireless files were unusable.</li>
+<li>Was able to fill in some data in Aug 2012 with wireless, but not the large gap from 10/29/2012-12/04/2012</li>
+<li>Made new fluxall files for PJ_girdle 2009-2013.</li>
+</ul>
+</li>
+<li>Working on GLand filling. Lots of gaps in 2009, 2011, and 2012.</li>
+</ul>
+<h2 id="3-5-2015">3-5-2015</h2>
+<p>Making new FLUXALL and AF files.</p>
+<ul>
+<li>All PJ - relaxed CO2 limits to: co2_max_by_month = [ 2.5, 2.5, 2.5, 3.5, 4, 5, 6, repmat( 6, 1, 5 ) ]</li>
+<li>One of the HMP sensors delivered bad Tair and RH data from 2009 to late 2012 (or later). Data from this sensor, which appears to be the canopy level sensor (not top of tower)  is labeled AirTC_2 and RH_2. This is a potential issue for other variables output from the datalogger as well, as e_sat, e, h2o_hmp, and rho_d are calculated with these to variables by the datalogger. This AirT and RH data is now excluded from the qc and gf files (but notes remain  below).</li>
+<li>PJ 2009 &amp; 2010: OK, except for rH</li>
+<li>PJ 2011<ul>
+<li>rH</li>
+<li>There are some low CO2 filters applied at the end of the year that seem a little strange. CO2 (ppm measured by IRGA) went pretty low at this time, probably due to some type of calibration problem. There are also cal problems in 2012.</li>
+<li>Missing data periods: day 33, 59.5-61.5, 336-338, 352-357</li>
+</ul>
+</li>
+<li>PJ 2012<ul>
+<li>rH has the same problem, but changes to a new problem out 2/3 through year</li>
+<li>Change in datalogger time on afternoon of day 342.</li>
+<li>Created exception to low_co2 filter for days 168-174.</li>
+<li>Missing data periods: day 19-23.5 (not fixable), 70.5-71.5, 220-237.5 (found on wireless), 312.5-317.5 (not fixable), 338-340 (not fixable).</li>
+</ul>
+</li>
+<li>PJ 2013<ul>
+<li>rH looks like garbage the entire year.</li>
+<li>There is a messed up Rg sensor from mid June to mid July. Logs indicate that there was a broken lead that led to this that was repaired around July 17.</li>
+<li>Filling the Rg data was problematic. We fill from PJG by default, which has a similar timeshift, so initially the timing of the filled in Rg data was offset. MAKE SURE TO CORRECT ALL "for_gapfilling" FILES BEFORE MET GAPFILLING!!!!.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-27-2015">2-27-2015</h2>
+<h3 id="timing-issues">Timing issues</h3>
+<p>Shifts and such are working now - one remaining issue - plotting data for a timestamp means you are plotting the data for the prior half hour. This means data in plots is always plotted 15 minutes later than the period it was collected. I'm not sure how this affects our time shifts yet.</p>
+<h3 id="10hz-data-processing">10hz data processing</h3>
+<p><code>UNM_process_10hz_main.m</code> is the main script that does this, This is called from <code>card_data_processor.m</code> if there is no 10hz data, or if reprocessing is specified.</p>
+<ol>
+<li><code>UNM_process_10hz_main</code> breaks the processing period into chunks ( 30 day is the default ) and gets directory of TOB1 files.</li>
+<li><code>UNM_process_10hz_main</code> then loops through each chunk and passes the start and end time of each chunk, some configuration items (lag, sonic orientation), and the directory to <code>process_TOB1_chunk.m</code>.</li>
+<li><code>process_TOB1_chunk.m</code> opens each file using <code>read_TOB1_file</code>, vertically concatenates the data, makes a matlab datenum for each observation, bins observations into 30 minute periods, and sends each 30 minute chunk of data to <code>UNM_30min_TS_averager</code>.</li>
+<li>It appears that <code>process_TOB1_chunk.m</code> correctly shifts the timestamp on these chunks such that each 30 minute average is for the the observations in the half hour PRIOR to its timestamp.</li>
+<li><code>UNM_30min_TS_averager</code> calls a number of other functions to correct high frequency data and calculate the 30 min fluxes from 10hz data ( <code>UNM_dry_air_conversions</code>, <code>UNM_csat3</code>, <code>UNM_flux_031010</code> and others).</li>
+<li>These 30 minute averages are then vertically concatenated by <code>process_TOB1_chunk.m</code>, the 30 day chunks are returned to <code>UNM_process_10hz_main</code>, vertically concatenated, given a timestamp, given <code>jday</code>, and then missing data periods are filled in (with timestamp and NaNs).</li>
+</ol>
+<h2 id="2-25-2015">2-25-2015</h2>
+<ul>
+<li>Something is wrong with the way <code>jday</code> gets calculated in the fluxall files. It starts out ok, but then gets rounded.<ul>
+<li>Figured this out - it was an issue with the precision of exporting FLUXALL files in <code>export_dataset_tim.m</code> I set this to 8 (should be a minimum from now on).</li>
+</ul>
+</li>
+<li>I have noticed that in most instances the timestamp variables are getting moved by <code>UNM_fix_datalogger_timestamps.m</code>, so the 30min data moves, but its timestamp variable is moved along with it.</li>
+<li>10hz data is moved relative to the 30min data, but its timestamps move with it also.</li>
+<li>However, AF files ARE actually shifted relative to FLUXALL data - this was confusing.</li>
+<li>After examination this doesn't seem to be too bad of a problem. In the <code>RBD</code> script at least, the original data timestamp is what is used to create the output files, so effectively, the data do move relative to the timestamp, even though it does not appear this way in the <code>UNM_fix_datalogger_timestamps.m</code> script. There is probably a better and more consistent way to do this though.</li>
+</ul>
+<h2 id="2-22-2015">2-22-2015</h2>
+<p>Implemented script to calculate solar noon, theoretical sunrise, and sunset for a site to use in our analysis (<code>noaa_solar_calculations.m</code>). This is based on the NOAA calculator <a href="http://www.esrl.noaa.gov/gmd/grad/solcalc/">here</a>.</p>
+<h2 id="2-20-2015">2-20-2015</h2>
+<h3 id="investigating-time-shifts">Investigating time shifts</h3>
+<p>I have mainly used PJ2010 as a case study for this, and have only used 1 date for checking (July 21, 2010 at 3pm). From the figures the AF team sent in August, it looks like our clocks are at least an hour fast (at solar noon, roughly 12:10 actual time our clocks say it is 1:30) in 2008-2010.</p>
+<ul>
+<li>There doesn't appear to be any problem putting 30min data into a fluxall file. Timestamps and data seem to match up between the TOA5 files and the fluxall files made in 2013.</li>
+<li>Made new 10hz data (TOB1_filled.txt files) and FLUXALL files for PJ 2009 and 2010 so I could compare timestamps in the FLUXALL files and make sure they were lining up with the raw data files (TOA5 and TOB1).</li>
+<li>Data in new FLUXALL files (mine) line up with the TOA5 files and TOB1 files!</li>
+<li>Some covariances and ustar also appear to line up pretty well between the 10hz and 30min sides of the files (ie. <code>wt_covariance</code> vs. <code>cov_Ts_Uz</code> and <code>ustar</code> vs <code>u_star</code>), but they are not exact.</li>
+<li>Fc values don't match particularly well between the 30min and 10hz sides of the FLUXALL file.</li>
+<li>The AF files on cdiac  (made in spring/summer 2013) contain the shifts defined in the current version of RBD.m and the qc file made around the same time. This means that 10hz data is shifted 30 minutes earlier, and 30min data is shifted 1 hour earlier relative to the fluxall made at the same time. The more current version of the fluxall file that I made has the same shifts.</li>
+</ul>
+<h3 id="the-way-it-was-done-by-timrandy">The way it was done by Tim/Randy</h3>
+<ol>
+<li><code>get_solar_elevation.m</code> is used to calculate a theoretical solar angle for each timestamp in a dataset.</li>
+<li>A function called <code>match_solar_elevation.m</code> then calculates the time differences (offset) between observed sunrise (first increase in radiation), and theoretical (solar elevation above 0).</li>
+<li>Running <code>UNM_site_plot_doy_time_offsets.m</code> for a particular day of the year will show the results of <code>match_solar_elevation.m</code>.</li>
+<li>These offsets are plotted in the function <code>UNM_site_plot_fullyear_time_offsets.m</code>.</li>
+<li>Somehow these plotted time offsets are used to make a determination about how much and when to shift the data.</li>
+<li>Actual shifting of the data (by site and year) is configured and executed in <code>UNM_fix_datalogger_timestamps.m</code> when the <code>RemoveBadData</code> scripts are run.</li>
+<li><code>UNM_fix_datalogger_timestamps.m</code> executes each individual shift with a call to<code>shift_data.m</code>. I suspect that the timestamp columns are being moved along with the data in most cases because the 'columns_to_shift' variables are set incorrectly. This should be fixed.</li>
+</ol>
+<h2 id="2-17-2015">2-17-2015</h2>
+<p>Currently updating ancillary meteorology (for gapfilling) data. Note that:</p>
+<ul>
+<li>PRISM data for the 2nd half of 2014 is still provisional (I have not downloaded it yet)</li>
+<li>There is no DayMet data for 2014 (yet?)</li>
+<li>I have found a way to download good data from the DRI Jemez site (documented in the README file)</li>
+<li>2014 VCP SNOTEL sites and VCP preserve sites are current.</li>
+<li>Still trying to track down a good way to get Sev data</li>
+</ul>
+<h2 id="2-11-2015">2-11-2015</h2>
+<p>Some current issues:</p>
+<ul>
+<li>Soil sensor/header histories are now complete, including new header resolution files. Soil sensor histories are in a separate note here. The code also incorporates separately logged data (second datalogger) into the fluxall files automatically now for all sites but MCon and PPine. There is still some work to do on resolving the DRI soil sensor data for  these sites. Still have not made new AmeriFlux "soil" files.</li>
+<li>Am working on improvements to the precipitation filling scripts. Once these are complete, data for 2014 from the various sources needs to be tracked down.</li>
+</ul>
+<h2 id="1-16-2015">1-16-2015</h2>
+<p>Have been piecing together the soil sensor/header histories for Sev sites and JSav for the last week. This has resulted in a new series of header resolution files and some changes to how they are generated. Once all sites are done, there are a few tasks left:</p>
+<ul>
+<li>Assemble good datasets of separately logged soil data from sites with extra dataloggers (MCon, PJ sites, PPine, and Jsav in 2012-13)</li>
+<li>Incorporate separately logged soil data into fluxall making code.</li>
+<li>Remove calls to other header renaming code (currently this is the <code>UNM_assign_soil_data_labels</code> files) as fluxall files are made.</li>
+<li>Figure out how to make new AF soil files using these new fluxall files.</li>
+</ul>
+<h2 id="1-8-2015">1-8-2015</h2>
+<p>Now that we are processing cards that span 2014-2015 there is a problem in which the 10 hz data processsing code does not allow this. So These cards will have to be split up to complete the 2014 fluxall files and star the 2015 fluxall files. This should be done in card_data_processor.m.</p>
+<h2 id="1-5-2015">1-5-2015</h2>
+<p>What is the deal with soil sensor data at a site? See the [[Site soil sensor histories]] note</p>
+<h2 id="12-18-2014">12-18-2014</h2>
+<p>Prior to going to AGU I made new AF files with filled precip. However, there is an issue where some files end with a row of zeroes that throws of reading and analyzing the data - should fix this.</p>
+<p>There is still a problem with headers PJG 2009 Radiation and CNR1 temp are messed up!</p>
+<h2 id="12-11-2014">12-11-2014</h2>
+<p>Have been working on improving the met gapfilling procedures and adding data sources for this (mainly for precip). See commits () and ().</p>
+<p>Note that all qc and for_gapfilling files will need to be remade.</p>
+<h2 id="12-8-2014">12-8-2014</h2>
+<p>Precip values in qc files are not corrected for the incorrect multiplier values.... this should be fixed.</p>
+<h2 id="12-5-2014">12-5-2014</h2>
+<p>To access <a href="http://daymet.ornl.gov/">DayMet data</a> for our sites, there is a multiple pixel extractor tool that can be downloaded from the site. Downoad and unzip this tool, then edit the <code>latlon.txt</code> file within the new folder to include our site coordinates and the desired output filenames. Run <code>daymet_multiple_extraction.sh</code> (or the .jar file) and this will download temp, precip, and other data (1980 to 12/31 of prior year) for each point in the <code>latlon.txt</code> file and create a new csv file. </p>
+<h2 id="12-4-2014">12-4-2014</h2>
+<p>To access <a href="http://prism.oregonstate.edu/recent/">PRISM datasets</a> requires reading the band interleaved (.BIL) files they provide. This can be done in by using <a href="http://www.gdal.org/">GDAL</a> from python, but some things need to be installed on the system first. On windows it is a little tricky and you need to be sure the GDAL you install (which comes from <a href="http://www.gisinternals.com/sdk/">here</a>) is compatible with your Python installation. </p>
+<ul>
+<li>Decent instructions can be found <a href="http://pythongisandstuff.wordpress.com/2011/07/07/installing-gdal-and-ogr-for-python-on-windows/">here</a>.</li>
+</ul>
+<p>Once GDAL is installed, the python bindings need to work. I have installed the Anaconda Python distribution on the lab computer, with Python 3.4. GDAL is only compatible up to 3.3, so we need to also create a Python 3.3 environment. Instructions for this can be found <a href="http://www.walkingrandomly.com/?p=5089">here</a>.</p>
+<ul>
+<li>Use <code>activate py33</code> from the windows shell to switch to this environment</li>
+</ul>
+<p>There are two python scripts and a list of coordinates (<code>site_coords.txt</code>) needed to generate daily precip datasets from PRISM. In ipython run <code>getPrismPrecip.py</code>. This calls the <code>prismParser</code> class to open the Bil files and extracts the PRISM grid cell value for each site listed in the <code>site_coords.txt</code> file.</p>
+<h2 id="12-2-2014">12-2-2014</h2>
+<ol>
+<li>Added a linear fit to make Rlong_incoming data at PJG for 2009 to 2013 match the same data at PJC. There was an offset between the sensors that  seemed to be in error. I generated the regression coefficients for each year using R, then applied the linear fit in <code>UNM_RBD_apply_radiation_calibration_factors.m</code>. See changeset 731 (05b89ee30c8b).</li>
+</ol>
+<h2 id="11-25-2014">11-25-2014</h2>
+<ol>
+<li>
+<p>Made new fluxall files for 2007-2008 at most sites (with records that far back). These have not had 10hz data filled in with 30min data because the <code>30_min_spooler</code> does not currently work for them.</p>
+</li>
+<li>
+<p>There is no precip data for MCon or PPine in 2007 &amp; 2008. It appears in the old fluxall files, but I have no idea where this originally came from. I tried pasting in precip from old files, but this didn't work well.</p>
+</li>
+<li>
+<p>There are no radiation components (including CNR1 temp) for PJC in 2007.</p>
+</li>
+<li>
+<p>PJG 2013 Rlong in and out are still missing in the new ameriflux files!</p>
+</li>
+<li>
+<p>PJ 2007 looks terrible in the partitioned data returned from eddyproc - should probably investigate this and exclude from Biederman analysis.</p>
+</li>
+<li>
+<p>Ultimately I was unable to make new <code>fgf</code> and <code>fgf_filled</code> files for MCon and PPine 2007 &amp; 2008, or for PJ 2007 due to the issues above. Instead of try to solve these problems now, I sent older <code>fgf_filled</code> files to Jena and will use these (at least for the 4 sites Joel needs).</p>
+</li>
+<li>
+<p>Also sent an older <code>fgf_filled</code> file to partitioner for MCon 2010 because the fluxall file I made is missing precip values and has large unfilled gaps (compared to old files).</p>
+</li>
+</ol>
+<h2 id="11-24-2014">11-24-2014</h2>
+<ol>
+<li>Have now created new AF files for all sites from 2009-2013<ul>
+<li>PJ 2011 will need to be revised to use the updated fluxall from Dan</li>
+</ul>
+</li>
+<li>Moving towards making new fluxall files for 2007-08<ul>
+<li>Copied TOB1 data over from archive disk (MyBook, L:).</li>
+<li>Have also moved old fluxall.xls files over from jemez to compare with.</li>
+</ul>
+</li>
+<li><code>UNM_30min_spooler</code> and the <code>UNM_30min_flux_processor</code> scripts that it calls need major work. Some of the old versions of them seem pretty buggy. </li>
+</ol>
+<h2 id="11-20-2014">11-20-2014</h2>
+<ol>
+<li>
+<p>I think the Massman and WPL corrections need to be examined in detail. When processing 10hz data files program calls are: <code>process_TOB1_chunk.m</code> -&gt; <code>UNM_30min_TS_averager.m</code> -&gt; <code>UNM_flux_031010</code> -&gt; <code>UNM_WPLMassman.m</code> (which calculates WPL and calls -&gt; UNM_massman.m to get the Massman correction). However, the WPL correction is also calculated in <code>UNM_flux_031010</code>, so it doesn't look like the <code>UNM_WPLMassman.m</code> calculation is used. I'm not sure which is correct. In any case, if these need to be changed all 10hz data will need to be recalculated into 30min fluxes. Which will take ... forever.</p>
+<pre><code>Another solution is just to remove the cold weather fluxes when they look bad at MCon. Essentially this is what the CO2 max-min filter (which I am still using) is doing, but I will have to improve on this solution.
+</code></pre>
+</li>
+<li>
+<p>Marcy is curious if PJG and PJC have the same energy balance. Need to compare R_long in and R_short in for both sites and see if they correlate well. If not, can we correct this (a regression maybe?).</p>
+</li>
+<li>
+<p>The radiation corrections in <code>UNM_RBD_apply_radiation_calibration_factors.m</code> are highly suspect. These need to be reviewed.</p>
+</li>
+</ol>
+<h2 id="11-16-2014">11-16-2014</h2>
+<ol>
+<li>Could not fill any missing 2013 or 2012 data for MCon using the wireless data that Renee provided (all are real gaps-no irga/sonic data).</li>
+<li>Filled part of 11/15-11/19 and 11/25-11/28 gaps with wireless data and will generate flux data with 30min side (ts_data file is corrupt).</li>
+<li>Figured out what fluxes from which files make it into Ameriflux files. This is determined in <code>UNM_Ameriflux_prepare_output_data.m</code>. Lasslop partitioning is used.</li>
+</ol>
+<h3 id="unfilled-fluxes-are">Unfilled fluxes are:</h3>
+<ul>
+<li><code>NEE_obs</code> comes from <code>fc_raw_massman_wpl</code> in the qc file for the site/year.</li>
+<li><code>LE_obs</code> comes from <code>HL_wpl_massman</code> in the qc file</li>
+<li><code>H_obs</code> comes from <code>HSdry_massman</code> in the qc file</li>
+</ul>
+<h3 id="gapfilled-fluxes-are">Gapfilled fluxes are:</h3>
+<ul>
+<li><code>NEE_f</code> comes from <code>NEE_f</code> in DataSetafterFluxpart.txt.</li>
+<li><code>LE_f</code> comes from <code>LE_f</code> in DataSetafterFluxpart.txt.</li>
+<li><code>H_f</code> comes from <code>H_f</code> in DataSetafterFluxpart.txt.</li>
+</ul>
+<p>The script ensures that observed values are used where available.</p>
+<h3 id="partitioned-fluxes-are">Partitioned fluxes are:</h3>
+<ul>
+<li><code>RE_f</code> comes from <code>Reco_HBLR</code> in DataSetafterFluxpartGL2010.txt (Lasslop partitioned).</li>
+<li><code>GPP_f</code>comes from <code>GPP_HBLR</code> in DataSetafterFluxpartGL2010.txt (Lasslop partitioned).</li>
+</ul>
+<h3 id="recalculations-to-nee-gpp-and-re-to-ensure-carbon-balance">Recalculations to NEE, GPP and RE to ensure carbon balance</h3>
+<ul>
+<li><code>NEE_2</code> = <code>NEE_f</code></li>
+<li><code>GPP_2</code> = <code>RE_f</code>  - <code>NEE_2</code>, when GPP is negative, set to zero and add difference to RE.</li>
+<li><code>RE_2</code> = <code>RE_f</code> plus the difference when NEE exceeds RE.</li>
+</ul>
+<p>These values (<code>NEE_2</code>, <code>GPP_2</code>, and <code>RE_2</code>) are then sent to the output both preserving original gaps, and in gapfilled form.</p>
+<h2 id="11-12-2014">11-12-2014</h2>
+<p>Verified that the burba correction we have in RBD.m is correct, according to the spreadsheet that came from George Burba. I put MCon 2010 data into both and came out with roughly the same values.</p>
+<p>I am a little concerned that units under particular headers differ between some years/sites. For example MCon 2010 <code>H2O_mean</code> header is in mmol/mol, while this changes to g/m^3 in later years. Rho measurements appear to be in different units, and moist and dry values may be confused in some fluxall files (based on what I can tell from the datalogger program).</p>
+<h2 id="11-10-2014">11-10-2014</h2>
+<ol>
+<li>Moved all old <code>fluxall.txt</code> files over from jemez (except 2014) from the 8 sites. For now I am ignoring Excel fluxall files but have included other ancillary datasheets (not sure what some are).</li>
+<li>Moved all old <code>processed_data</code> files over from jemez. Within each sites <code>processed_data</code> directory, the old files are in the <code>fgf_archive</code>, <code>fgf_filled_archive</code>, <code>qc_archive</code>, and <code>fluxpart_archive</code> folders.<ul>
+<li>for the most part I have checked and then left files in subdirs of <code>processed_data</code> on jemez. Usually these are subsets of data, archived data (perhaps prior to processing changes), or irregular looking files. May be worth looking at these at some point.</li>
+</ul>
+</li>
+<li>In process of moving all data in each sites <code>toa5</code> and <code>ts_data</code> directories from Jemez to Sandia.<ul>
+<li>GLand, JSav, MCon, New_GLand, PJ, PPine, PJ_girdle, SLand</li>
+<li>All subdirectories in Jemez <code>toa5</code> and <code>ts_data</code> folders were moved</li>
+</ul>
+</li>
+<li>Moved old ancillary met data over from jemez.</li>
+<li>Moved old licor 8100 data files and MCon precip data files over from jemez</li>
+</ol>
+<h2 id="11-07-2014">11-07-2014</h2>
+<p>Met with Marcy/Dan/Laura:</p>
+<p>TO DO in prep for AGU:</p>
+<ol>
+<li>Get calculated u* tresholds calculated for all years at all sites (or as many as possible) using the MPI eddyproc tool.</li>
+<li>Make plots of the binned u<em>/NEE from each site/year (output from RBD.m)
+3 Compare the MPI and our u</em> thresholds</li>
+<li>Check that longwave radiation looks ok in current and older AF files</li>
+<li>Compare Reichstein and Lasslop partitioning of Reco at MCon and decide which to use.</li>
+<li>Regenerate older AF files with new changes to RBD (inc. Burba, u*, etc) - do this for as many sites/years as possible.</li>
+</ol>
+<h2 id="11-06-2014">11-06-2014</h2>
+<p>Working on Burba correction and other issues at MCon. </p>
+<ul>
+<li>implemented the Burba correction but it doesn't change winter uptake fluxes radically (they are still there mostly).</li>
+<li>Also investigated timestamp corrections to see if they were to blame, but no indication of this yet</li>
+</ul>
+<h2 id="11-05-2014">11-05-2014</h2>
+<p>Met with Marcy to discuss some issues with MCon data. Part of this is motivated by Joel Biederman's findings that this site seems to have abnormally low Reco (relative to GPP). A few things need to be examined.</p>
+<ul>
+<li>We have somewhat unusual looking amounts of uptake (negative NEE) in the depths of winter, even when temps are low. This may indicate that our Burba cold temp correction is faulty.<ul>
+<li>I checked this, and think the Burba correction isn't being applied to the flux data. It seems to be calculated correctly (I think), but it is never applied to the <code>Fc</code> values that are exported for further processing.</li>
+</ul>
+</li>
+<li>The partitioned fluxes at MCon look sort of funny. Reco is pretty low in winter/spring (and similar to PPine), but there is not much of an increase when the weather warms up. This could be a partitioner problem (we should compare both the Lasslop and Reichstein methods). </li>
+<li>Other possible explanations for the low respiration include N deposition, which can suppress decomposition and stimulate GPP, low C stocks due to harvest (though Marcy seems to think there is tons of soil C there), or we may be losing some of the respiration to downslope flow from the ridge.</li>
+<li>There is a pulse of respiration around May during many years at MCon. Maybe this is snowmelt related?</li>
+</ul>
+<p>TO DO:</p>
+<ol>
+<li>Fix the Burba correction in RBD.m and see that it is applied to the outgoing data.</li>
+<li>Make plots of Fc with and without the Burba correction.</li>
+<li>Make winter plots of uncorrected and Burba corrected flux vs temperature.</li>
+<li>Plot summer Reco form both Lasslop and Reichstein partitioning methods.</li>
+<li>Look at the timing of snowmelt (maybe using albedo) at MCon to see if the positive NEE pulse is related to this.</li>
+<li>Marcy wants to know what parameters the eddyproc site uses - not sure which parameters or how to find them out. Maybe look in the info log?</li>
+<li>Prod Marcy to ask around about N deposition and soil C data at MCon.</li>
+</ol>
+<h2 id="11-04-2014">11-04-2014</h2>
+<p>Solving GLand/New_GLand problems from prior months - all card data files have been moved to the right folders and are ready to be reprocessed. New(ish) cards have also had files copied to <code>Raw_data_from_cards</code> directories, and to a directory on the NAS.</p>
+<ul>
+<li>There is a missing <code>1473.ts_data.dat</code> file (for GLand) from 9/4/2014. This file exists on the card but it is corrupt and cannot be copied or repaired by CardConvert. May need to be found on wireless.</li>
+</ul>
+<h2 id="11-03-2014">11-03-2014</h2>
+<p>Revisited ustar filtering (run <code>UNM_RemoveBadData(UNM_sites.{SITE}, {YEAR}, "iteration", 1, "draw_plots" 3)</code> at SLand, PJ, PJG, and JSav.</p>
+<ul>
+<li>Changed JSav: 0.8 --&gt; 0.9</li>
+<li>I sent 2013 data from the lowest 6 sites to the MPI partitioner without u<em> filtering applied and asked for eddyproc to do u</em> filtering.<ul>
+<li>In general, eddyproc's selected u* thresholds are much more conservative (higher) than ours.  They have been added as comments in RBD.m</li>
+</ul>
+</li>
+<li>Did not change any limits for now. These seem like pretty subjective calls to use the plots RBD.m makes.</li>
+</ul>
+<h2 id="10-31-2014">10-31-2014</h2>
+<p>The 1 day per 30 gaps in fluxall TOB data is being introduced in the flux processing code for some reason</p>
+<h2 id="10-29-2014">10-29-2014</h2>
+<ul>
+<li>
+<p>There are now 2 irgas at SLand. Archive the <code>ts_data2.dat</code>and <code>flux.dat</code> files in the <code>Raw_data_from_cards</code> folder, then cancel conversion to TOA5 and TOB1. At some point we'll need to process these, and there will be an extra irga at GLand.</p>
+</li>
+<li>
+<p>Other sites missing data in 2013:</p>
+<ul>
+<li>PJG and SLand have missing 10hz data one day a month (not sure why) - this was all filled in with 30min data</li>
+<li>PJ 11/22 - 26 - nothing on wireless, looks like irga was down - not filled</li>
+<li>GLand 10/18 - 22 - filled in with wireless data.</li>
+<li>New_GLand 11/22-24 and 11/24-25 were missing from the card data and wireless data - not filled</li>
+<li>PPine has big gaps in Nov. and Dec., but there is no wireless data to fill with.<ul>
+<li>30min data that is available (rare) during PPing gaps looks pretty suspect to me so I didn't fill from 30 min periods.</li>
+</ul>
+</li>
+<li>Similar problem at MCon - there are gaps (outside of fire) but the 30min data available to fill them looks funny to me.</li>
+</ul>
+</li>
+<li>
+<p>All the 30min fill in periods for JSav, SLand, GLand, and PJ_girdle were added to <code>UNM_30_min_spooler.m</code>.</p>
+</li>
+</ul>
+<h2 id="10-28-2014">10-28-2014</h2>
+<h3 id="gap-filling">Gap filling</h3>
+<ul>
+<li>Done patching JSav 2013 from wireless and 30 min data<ul>
+<li>Filled  3/20-4/17 and 4/24-5/16 gaps with wireless data, but the 3/20-4/17 part is very sparse (intermittent irga problems?)</li>
+<li>Also filled some gaps in October with wireless data</li>
+<li>Filled 3/27- 4/1, 7/20-7/24 and 11/27 from 30min data (<code>UNM_30min_flux_processor_Tim</code>)</li>
+<li>Couldn't find wireless or 30 min data to fill missing periods from Jan 1 - 16 (irga down) and July 25-29 (irga and sonic down?)</li>
+</ul>
+</li>
+<li>Done patching SLand 2013<ul>
+<li>Patched 1/1 - 1/16, 2/13-2/15, 3/15-3/19 with wireless data.</li>
+<li>Filled 1/1, 3/2, 8/28, 9/28, 10/28 with 30min data.</li>
+<li>Couldn't find  wireless or 30min data to fill Aug 14-28.</li>
+</ul>
+</li>
+<li>Done patching PJ_girdle<ul>
+<li>Patched 4/24-4/30 with wireless data - still seems to be empty, to the irga was probably down</li>
+<li>Couldn't find wireless or 30min data to patch Aug 14-21 or Nov 22-25</li>
+</ul>
+</li>
+</ul>
+<h2 id="10-24-2014">10-24-2014</h2>
+<p>Today I am filling missing 2013 data from wireless downloads. First step was to make a new TOA5 file for JSav 2013 (<code>TOA5_JSav_2013_04_24_1230.dat</code>) using a wireless download and vim. The data were missing due to a messed up card (I think) but were found on the wireless.</p>
+<h4 id="steps-to-create-new-toa5-files-from-wireless-data">Steps to create new TOA5 files from wireless data.</h4>
+<p>WARNING - Poorly formatted TOA5 files cause big problems. Be careful to follow all these steps. Also, this will overwrite old fluxall files. Make a backup!</p>
+<ol>
+<li>Copy the desired wireless files (something like <code>NMUFN_{SITE}_CR5000_flux.dat.backup</code> file to the <code>FLUXROOT\{SITE}\wireless_data</code> directory.</li>
+<li>Open the file in Excel and delete the 'Records' column (second column) from the second line to the end of the file.</li>
+<li>Excel screws up date formatting, so select the dates and format to custom -&gt; 'yyyy-mm-dd hh:mm:ss'
+4 Save as a csv file with a filename that matches the startdate of the 30min period being patched (<code>TOA5_JSav_2013_4_24_1230.dat</code>).</li>
+<li>Since Excel has screwed up the formatting, copy the correct headers (lines 2-4) over from the wireless backup data file, then remove the second headers in lines 2-4 (indicating "Record"). I normally do this in a diff program.</li>
+<li>Open in vim (or another text editor) and delete all lines with timestamps outside the range needed to fill the gap.
+7 Put quotes around the date string. In vim do this with:<ul>
+<li><code>%s/^2013-/"2013-/g</code></li>
+<li><code>%s/:00,/:00",/g</code></li>
+<li>These should make changes on all lines</li>
+</ul>
+</li>
+<li>Excel has also changed "-INF" values to #NAME? so these need to be changed back with <code>%s/#NAME?/"-INF"/g</code></li>
+<li>Put the new TOA5 files in  <code>\wireless_data\toa5_patch</code>.</li>
+</ol>
+<p>From here - copy the new files into the appropriate folder (<code>\toa5</code>), make a new cdp object and do <code>cdp.update_fluxall</code> (making sure it loads and processes correct TOA5 files).</p>
+<h4 id="steps-to-create-new-tob1-files-from-wireless-data">Steps to create new TOB1 files from wireless data.</h4>
+<p>WARNING - this will overwrite old fluxall files. Make a backup!</p>
+<ol>
+<li>Copy the desired wireless files (something like <code>NMUFN_{SITE}_CR5000_ts_data.dat.backup</code> file to the <code>FLUXROOT\{SITE}\wireless_data</code> directory.</li>
+<li>Change the extension of files you wish to convert to TOB1 format to <code>{FILENAME}.ts_data.dat</code>  (remove <code>backup</code> and change 2nd to last '_' to '.'</li>
+<li>Run <code>[tsdata_convert_success, ts_data_fnames] = tsdata_2_TOB1(UNM_sites.JSav, fullfile(get_site_directory(UNM_sites.JSav), 'wireless_data'), 'wireless', true)</code></li>
+<li>This should go through the archived wireless file and make new TOB1 files and put them in <code>\wireless_data\ts_data_patch</code>.</li>
+</ol>
+<p>From here - copy the new files into the appropriate folder, make a new cdp object and do <code>cdp.update_fluxall</code> (making sure it loads and processes correct TOB1 files).</p>
+<h2 id="10-22-2014">10-22-2014</h2>
+<p>There are a few precipitation wiring and logging issues that have taken place at some sites over the years, and these need to be corrected during the flux processing. Currently these are only fixed on the way to making Ameriflux files (so fluxall and qc files are wrong) by <code>fix_incorrect_precip_factors.m</code>.  </p>
+<p>The problems described below are fixed as of today (see Changeset 699 (dbf0805b78ad))</p>
+<ol>
+<li>
+<p>PJC</p>
+<ul>
+<li>The metric precip gauge was installed 1/15/2008</li>
+<li>On 5/12/2010 the precip multiplier changed (vol per tip in mm or in) from .254 to 0.1 in <code>PINON_JUNIPER_051210.CR5</code></li>
+<li>The rain gauge has metric output (0.1 mm/tip), so this corrected incorrect logging of precip (was .254 since install)</li>
+<li>This program was uploaded to the CR5000 on 5/31/2010 according to the logs</li>
+<li><code>fix_incorrect_precip_factors</code> corrected the earlier data for the Ameriflux files (but not other files), but the dates of the correction were wrong (started too early - May 12th) and extended too long (Randy extended to 2013).</li>
+<li>2010 Ameriflux file may need to be remade.</li>
+</ul>
+</li>
+<li>
+<p>JSav</p>
+<ul>
+<li>A metric rain gauge (.1mm/tip) was installed at the site on 1/15/2008 (though this was either verified or reinstalled on 1/11/2012).</li>
+<li>The datalogger programs recorded each tip as .254 mm until January 10, 2014 (program <code>JSav_010714.CR5</code> sent to datalogger).</li>
+<li>This was corrected in <code>fix_incorrect_precip_factors</code> for 2010-2013, but early 2014 precip still needed a correction</li>
+</ul>
+</li>
+<li>
+<p>SLand</p>
+<ul>
+<li>In 2008 a new TE525USW (inches - 0.01in/tip) gauge was installed.</li>
+<li>The rain gauge at the site broke sometime in summer/fall of 2011.</li>
+<li>It is not clear if it was fixed or was replaced with a US inches calibrated gauge (.254 mm/tip), around Nov/Dec of that year and there is a note that it was still not working on 11/22/2011</li>
+<li>It was also changed to pulseport 1 on 11/22/2011</li>
+<li>Jonathan notes the rain gauge was working again (after some troubleshooting) on 4/2/2014</li>
+<li>Datalogger programs seem ok - conversion factor is 0.24</li>
+<li>Doesn't really seem like anything needs fixing - it will just have to be filled in with another site.</li>
+</ul>
+</li>
+<li>
+<p>GLand</p>
+<ul>
+<li>In 2007ish a new TE525mm (metric - 0.1mm/tip) gauge was installed.</li>
+<li>This was replaced on 8/21/2008 with a new gauge (same model?).</li>
+<li>Precip multiplier was .254 until program <code>UPLAND_GRASS_011614.CR3</code></li>
+<li>New program (corrected multiplier to 0.1) was sent on 1/17/2014</li>
+</ul>
+</li>
+<li>
+<p>New_GLand</p>
+<ul>
+<li>On January 17, 2014 a new program was uploaded (<code>newgrass_011614.CR5</code>) which changed the precip measurement from pulse port 1 to port 2. The gauge, however, was still wired to pulse port 1, so no precipitation (all zeroes) was collected thereafter.</li>
+<li>At the same time, the multiplier changed from .254 to 0.1 (wrong).</li>
+<li>The gauge was rewired to pulse port 2 on 4/2/2014 and started working again, but the multiplier was still 0.1 (incorrect)</li>
+<li>Correct multiplier (0.254) restored on 9/24/2014 when newgrass_092414.cr5 was loaded.</li>
+<li>Note that we are MISSING PRECIP data up to 4/2/2014! These should be filled from another site, which will happen because earlier these data are now set to NaN by 'RemoveBadData.m`.</li>
+</ul>
+</li>
+</ol>
+<h2 id="10-15-2014">10-15-2014</h2>
+<p>There was a problem with the filling of data from nearby sites at PPine (see Rg filling for PPine 2013 when <code>UNM_fill_met_gaps_from_nearby_site.m</code> is run)</p>
+<ul>
+<li>The filled data was MUCH lower in magnitude than the original data, creating a mismatch</li>
+<li>This appears to be related to the linear fit that is applied to some data - see the <code>fill_variable</code> function in the script.</li>
+<li>FIXED: It was the linear fit, but it failed because there were zeroes in the Fluxall data (removed with RBD.m now see 
+Changeset 694 (a0741548c5de))</li>
+</ul>
+<h2 id="08-29-2014">08-29-2014</h2>
+<ul>
+<li>Fixed matching timestamp problem in the combined 23x fluxall files I am making for laura. It has to do with the start and end date of the soil and fluxall files and whether they match.<ul>
+<li>see the comments in preprocess_PJ_soildata_DK1.m</li>
+<li>There is still some manual fiddling required to make the files build that depends on what the fluxall files look like for that year</li>
+</ul>
+</li>
+<li>Tweaked the JSav header resolutions file - now it does not work in the script - and will need more fixing?</li>
+</ul>
+<h2 id="08-27-2014">08-27-2014</h2>
+<ul>
+<li>Made <code>UNM_Ameriflux_Filemaker.m</code> work<ul>
+<li>it needs all yearly Ameriflux datafiles to make the concatenated daily file, these are put in FluxOut by default</li>
+</ul>
+</li>
+<li>There is a problem with the outputted file from PJG - no Rlong data. It is being removed by the <code>UNM_Ameriflux_prepare_output_data_TWH</code> script because it is out of range. This may not be a problem for other sites.</li>
+<li>Longwave radiation is negative when it comes in on cards - why?</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

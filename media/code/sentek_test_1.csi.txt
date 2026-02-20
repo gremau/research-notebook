@@ -1,0 +1,269 @@
+;{CR23X}
+; Sentek_test_1.CSI
+;
+;
+*Table 1 Program
+  01: 60        Execution Interval (seconds)
+
+;--------------------------------------------------------------------------------
+; Datalogger measurements
+;
+;----Measure battery voltage----
+1:  Batt Voltage (P10)
+ 1: 1        Loc [ batt_volt ]
+
+;----Measure panel temperature of datalogger----
+2:  Panel Temperature (P17)
+ 1: 2        Loc [ panelT    ]
+
+
+;---- Sentek EnviroSMART profile----
+; Profiles are set up with 4 sensors @ 10, 20, 40, and 60cm
+; Wiring to CR23X panel is:
+; White (excitation) to SW12V,
+; Red (signal) to C7
+; Sheath (bare wire) to signal ground
+;
+
+; Load scaled frequency to water content coeffs
+a=.1957
+b=.404
+c=.02852
+
+; Preload missing sensor error
+; Loop for a probe with 4 sensors
+3:  Beginning of Loop (P87)
+ 1: 0000     Delay
+ 2: 4        Loop Count
+
+
+     4:  Z=F x 10^n (P30)
+      1: -1000    F
+      2: 0        n, Exponent of 10
+      3: 3     -- Z Loc [ Sen9_SF_1 ]
+
+
+5:  End (P95)
+
+; Measure water content scaled frequencies (SF)
+; Loop through 5 retries
+6:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 5        Loop Count
+
+; There are other SDI-12 commands - see appendices in manuals
+     7:  SDI-12 Recorder (P105)
+      1: 0        SDI-12 Address
+      2: 0        Start Measurement (aM!)
+      3: 7        Port
+      4: 3        Loc [ Sen9_SF_1 ]
+      5: 1.0      Multiplier
+      6: 0.0      Offset
+
+     8:  If (X<=>F) (P89)
+      1: 3        X Loc [ Sen9_SF_1 ]
+      2: 2        <>
+      3: 0        F
+      4: 31       Exit Loop if True
+
+9:  End (P95)
+
+; Load measurement failure errors
+; Measurement of 0 at first sensor indicates inactive probe
+10:  If (X<=>F) (P89)
+ 1: 3        X Loc [ Sen9_SF_1 ]
+ 2: 1        =
+ 3: 0        F
+ 4: 30       Then Do
+
+     ; Set first sensor reading to -99999
+     11:  Z=F x 10^n (P30)
+      1: -99999   F
+      2: 0        n, Exponent of 10
+      3: 3        Z Loc [ Sen9_SF_1 ]
+
+12:  End (P95)
+
+; Loop through SF values to to set error codes or calculate WC
+13:  Beginning of Loop (P87)
+ 1: 0        Delay
+ 2: 4        Loop Count
+
+     ; If 1st sensor is < -9999, eg -99999, set all sensor readings to -99999
+     14:  If (X<=>F) (P89)
+      1: 3        X Loc [ Sen9_SF_1 ]
+      2: 4        <
+      3: -9999    F
+      4: 30       Then Do
+
+          15:  Z=F x 10^n (P30)
+           1: -99999   F
+           2: 0        n, Exponent of 10
+           3: 3     -- Z Loc [ Sen9_SF_1 ]
+
+          16:  Z=F x 10^n (P30)
+           1: -99999   F
+           2: 0        n, Exponent of 10
+           3: 7     -- Z Loc [ Sen9_WC_1 ]
+
+     ; Otherwise if a sensor scaled frequency < -999, eg -1000
+     17:  Else (P94)
+
+          18:  If (X<=>F) (P89)
+           1: 3     -- X Loc [ Sen9_SF_1 ]
+           2: 4        <
+           3: -999     F
+           4: 30       Then Do
+
+               ; Set water content data to -99999
+               19:  Z=F x 10^n (P30)
+                1: -99999   F
+                2: 0        n, Exponent of 10
+                3: 7     -- Z Loc [ Sen9_WC_1 ]
+
+          ; Otherwise calculate water content for the sensor
+          20:  Else (P94)
+
+               21:  Z=X-Y (P35)
+                1: 3     -- X Loc [ Sen9_SF_1 ]
+                2: 14       Y Loc [ C         ]
+                3: 7     -- Z Loc [ Sen9_WC_1 ]
+
+               22:  Z=X/Y (P38)
+                1: 7     -- X Loc [ Sen9_WC_1 ]
+                2: 12       Y Loc [ A         ]
+                3: 7     -- Z Loc [ Sen9_WC_1 ]
+
+               23:  Z=1/X (P42)
+                1: 13       X Loc [ B         ]
+                2: 11       Z Loc [ RecipB    ]
+
+               24:  Z=X^Y (P47)
+                1: 7     -- X Loc [ Sen9_WC_1 ]
+                2: 11       Y Loc [ RecipB    ]
+                3: 7     -- Z Loc [ Sen9_WC_1 ]
+
+          25:  End (P95)
+
+     26:  End (P95)
+
+27:  End (P95)
+
+
+; Write Data to Final Storage
+
+;28:  If time is (P92)
+; 1: 0        Minutes (Seconds --) into a
+; 2: 1        Interval (same units as above)
+; 3: 10       Set Output Flag High (Flag 0)
+
+
+28:  Do (P86)
+ 1: 10       Set Output Flag High (Flag 0)
+
+29:  Set Active Storage Area (P80)^23223
+ 1: 1        Final Storage Area 1
+ 2: 1        Array ID
+
+30:  Resolution (P78)
+ 1: 0        Low Resolution
+
+31:  Real Time (P77)^13262
+ 1: 1110     Year,Day,Hour/Minute (midnight = 0000)
+
+32:  Average (P71)^25120
+ 1: 1        Reps
+ 2: 1        Loc [ batt_volt ]
+
+33:  Average (P71)^5738
+ 1: 1        Reps
+ 2: 2        Loc [ panelT    ]
+
+
+34:  Sample (P70)^11047
+ 1: 4        Reps
+ 2: 7        Loc [ Sen9_WC_1 ]
+
+
+*Table 2 Program
+  02: 0.0000    Execution Interval (seconds)
+
+*Table 3 Subroutines
+
+End Program
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-Input Locations-
+1 batt_volt 1 1 1
+2 panelT    1 1 2
+3 Sen9_SF_1 1 5 5
+4 Sen9_SF_2 0 0 0
+5 Sen9_SF_3 0 0 0
+6 Sen9_SF_4 1 1 0
+7 Sen9_WC_1 1 3 5
+8 Sen9_WC_2 1 1 0
+9 Sen9_WC_3 1 1 0
+10 Sen9_WC_4 1 1 0
+11 RecipB    1 2 1
+12 A         1 1 0
+13 B         1 1 0
+14 C         1 1 0
+15 CSI_R     0 0 0
+16 _________ 1 0 0
+17 _________ 1 0 0
+18 _________ 0 0 0
+19 _________ 0 0 0
+20 _________ 0 0 0
+21 _________ 0 0 0
+22 _________ 0 0 0
+23 _________ 0 0 0
+24 _________ 0 0 0
+25 _________ 1 0 0
+26 _________ 0 0 0
+27 _________ 0 0 0
+28 _________ 0 0 0
+-Program Security-
+0000
+0000
+0000
+-Mode 4-
+-Final Storage Area 2-
+0
+-CR10X ID-
+0
+-CR10X Power Up-
+3
+-CR10X Compile Setting-
+3
+-CR10X RS-232 Setting-
+-1
+-DLD File Labels-
+0
+-Final Storage Labels-
+0,1,23223
+1,Year_RTM,13262
+1,Day_RTM
+1,Hour_Minute_RTM
+2,panelT_AVG~2,5738
+3,batt_volt_AVG~1,25120
+4,Sen9_WC_1~7,11047
+4,Sen9_WC_2~8
+4,Sen9_WC_3~9
+4,Sen9_WC_4~10
