@@ -17,7 +17,7 @@ theme:
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymadownx.superfences
+  - pymdownx.superfences
 repo_url: https://github.com/gremau/research-notebook
 site_url: https://greg.pronghorns.net/research-notebook
 edit_uri: edit/main/docs/

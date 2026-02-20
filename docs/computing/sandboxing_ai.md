@@ -1,6 +1,6 @@
 # Sandboxing AI agents
 
-Running agentic AI (like [Claude Code](https://claude.com/product/claude-code)) on a local machine seems a little risky. There are a few options to confine the AI to a "sandbox," which could be a Docker container or a virtual machine (VM). A virtual machine is a little more isolated from the local system, so that is what I use. 
+Running agentic AI (like [Claude Code](https://claude.com/product/claude-code)) on your local machine seems a little risky since an agent could conceivably gain access to private data, system files, etc. There are a few options to confine the AI to a "sandbox," which could be something like a Docker container or virtual machine (VM). A virtual machine is a little more isolated from the local system, so that is what I use. 
 
 ## Using Multipass with Claude Code
 
@@ -33,5 +33,3 @@ Once your environment is set up and you are in the shell of your VM, you'll want
     curl -fsSL https://claude.ai/install.sh | bash
 
 From here, you'll follow the prompts to connect Claude to your Anthropic account, and away you go.
-
-
