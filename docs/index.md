@@ -4,7 +4,9 @@
 
 This is [Greg Maurer](https://greg.pronghorns.net)'s research notebook. It is filled with assorted lab and field procedures, activity logs for various projects, preliminary research results, and many "notes to my future self" about data analysis, statistics, programming and computing. The pages are not always sensibly organized or well-written, but if you found your way here maybe it will have some value for you. Feel free to [contact me](mailto:greg@pronghorns.net) if you have questions or want to collaborate.
 
-**Caution**: All data, code, results, and discussions are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
+!!! info "Caution"
+
+     All data, code, results, and discussions are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
 
 
 ## Copyright information
