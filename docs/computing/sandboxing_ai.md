@@ -4,11 +4,11 @@ Running agentic AI (like [Claude Code](https://claude.com/product/claude-code)) 
 
 ## Using Multipass with Claude Code
 
-[Multipass](https://multipass.run/) is a lightweight VM orchestrator from Canonical that runs in MacOS, Windows, and Linux. You can use Multipass to set up Ubuntu VMs from the commandline in a fairly frictionless way. On Mac I install with 
+[Multipass](https://multipass.run/) is a lightweight VM orchestrator from Canonical that runs in MacOS, Windows, and Linux. You can use Multipass to set up Ubuntu VMs from the commandline in a fairly frictionless way on your local host machine (your laptop, for example). On Mac I install with 
 
     brew install multipass
 
-. Once it is installed, you can start the GUI if you want, or just use the commandline interface to spin up VMs. Here is how to start a VM for Claude to work in.
+, but this would be different for Windows or Linux. Once it is installed, you can start the GUI if you want, or just use the commandline interface to spin up VMs. Here is how to start a VM for Claude to work in.
 
     multipass launch --name claude-sandbox --disk 20G --memory 4G
 
@@ -16,13 +16,13 @@ It takes just a minute to spin up the VM, then you can enter the shell and explo
 
     multipass shell claude-sandbox
 
-There isn't much there - just a Linux environment with a few things installed. If you want to mount a local directory from the new VM you can do that from your local machine's shell. Below, mount your home directory to the `claude-sandbox` VM.
+There isn't much there - Multipass just creates an Ubuntu Linux installation with a few things installed, and your shell will be in the home directory of the `ubuntu` user. If you want to mount a local directory on your host machine to the new VM you can do that from the host shell. For example, you could mount your home directory to the `claude-sandbox` VM.
 
-    multipass mount $HOME claude-sandbox # $HOME is the environment variable containing your home directory
+    multipass mount $HOME claude-sandbox
 
-If you now run `multipass info claude-sandbox` you'll see the mount listed. The home directory is mounted at `/home/ubuntu/username`, and you'll find it there if you are logged into the `claude-sandbox` VM's shell. **You probably want to be careful about what parts of your local filesystem you mount in the VM!!!** Claude, or you, can read, edit and delete things on the local host filesystem once it is mounted in the VM. You can pass the `--read-only` option during mounting to prohibit write access. To unmount a local directory just use `multipass umount`.
+If you now run `multipass info claude-sandbox` you'll see the mount listed. The home directory is mounted at `/home/ubuntu/username`, and you'll find it there if you are logged into the `claude-sandbox` VM's shell. **You probably want to be careful about what parts of your local filesystem you mount in the VM!!!** Claude, or you, can read, edit and delete things on the host filesystem once it is mounted in the VM. You can pass the `--read-only` option during mounting to prohibit write access. To unmount a local directory just use `multipass umount`.
 
-    multipass umount claude-sandbox:/home/username 
+    multipass umount claude-sandbox:/home/ubuntu/username 
 
 !!! note
     
