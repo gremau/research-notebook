@@ -38,7 +38,7 @@ site_url = "https://greg.pronghorns.net/research-notebook"
 #
 # Read more: https://zensical.org/docs/setup/basics/#copyright
 copyright = """
-All content on this site &copy 2007-2026 by <a href="https://greg.pronghorns.net/">Greg Maurer</a> and licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+<a href="https://greg.pronghorns.net/research-notebook/">Research Notebook</a> &copy; 2007-2026 by <a href="https://greg.pronghorns.net">Gregory E. Maurer</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 """
 
 # Zensical supports both implicit navigation and explicitly defined navigation.

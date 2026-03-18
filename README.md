@@ -1,8 +1,8 @@
 # research-notebook
 
-This is the repository for [Greg Maurer](https://greg.pronghorns.net)'s research notebook. It is filled with assorted lab and field procedures, activity logs for various projects, preliminary research results, and many "notes to my future self" about data analysis, statistics, programming and computing. The pages are not always well organized or well-written, but if you found your way here maybe it will have some value for you. Feel free to [contact me](greg@pronghorns.net) if you have questions or want to collaborate.
+This is the repository for [Greg Maurer](https://greg.pronghorns.net)'s research notebook. It is filled with assorted lab and field procedures, activity logs for various projects, preliminary research results, and many "notes to my future self" about data analysis, statistics, programming and computing. The pages here are not always sensibly organized or well-written, but if you found your way here I hope they will have some value for you. Feel free to [contact me](mailto:greg@pronghorns.net) if you have questions or want to collaborate.
 
-**Caution**: All data, code, results, and discussions are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
+**Caution**: All data, code, results, and interpretations are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
 
 The website is created using the [Zensical](https://zensical.org/docs/get-started/) documentation publishing system and served by [GitHub Pages](https://docs.github.com/en/pages). The `main` branch of this repository contains all source files for the web pages, which Zensical renders into HTML files that are served from the `gh-pages` branch. These HTML files are what you see when you visit [the site](https://gremau.github.io/research-notebook) with your web browser. Source files are written in [Markdown](https://www.markdownguide.org/getting-started/) - a simple, plain-text markup language.
 
@@ -43,6 +43,6 @@ To build and preview the docs locally you need a Python environment configured w
 
     uv run zensical serve
 
-## Contact
+## Copyright and licensing
 
-Feel free to [contact me](greg@pronghorns.net) if you have questions or want to collaborate.
+<a href="https://github.com/gremau/research-notebook">Research Notebook</a> &copy; 2007-2026 by <a href="https://greg.pronghorns.net">Gregory E. Maurer</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
