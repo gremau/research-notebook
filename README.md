@@ -19,7 +19,7 @@ research-notebook/
 |  |-- media/                   #   Images and other media for display
 │  |-- .../                     #   (lots of other thematic subdirectories)
 |  `-- index.md                 #   The site's index or homepage
-|-- mkdocs.yml                  # The mkDocs configuration file
+|-- zensical.toml                  # The Zensical configuration file
 `-- README.md                   # This file
 
 ```
@@ -39,7 +39,7 @@ If you want to contribute feel free to fork and send a pull request, file an iss
 
 Whenever a new Git commit is pushed to the `main` branch of this repository, a GitHub Action (see it in `.github/workflows/`) will run to rebuild the website with any new content changes in the source files. This action takes all content in the `main` branch and uses MkDocs to render HTML and other files, then commits the result to the `gh-pages` branch. It is these files that are served to visitors at <https://gremau.github.io/research-notebook>.
 
-To build the docs locally and preview them, you need a Python environment configured. Using [`uv`](https://docs.astral.sh/uv/) is easiest, so install that first (instructions [here](https://docs.astral.sh/uv/getting-started/installation/)). The Zensical environment is provided in `pyproject.toml` and `uv.lock` files, and, once `uv` is installed you can preview the docs using the built in Zensical live preview server
+To build the docs locally and preview them, you need a Python environment configured. This project uses [`uv`](https://docs.astral.sh/uv/) to manage the build environment, so install that first (instructions [here](https://docs.astral.sh/uv/getting-started/installation/)). The Zensical environment is provided in `pyproject.toml` and `uv.lock` files, and, once `uv` is installed on your local machine you can preview the docs using the built in Zensical live preview server from the project directory.
 
     uv run zensical serve
 
