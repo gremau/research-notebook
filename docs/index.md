@@ -1,3 +1,7 @@
+---
+title: Home
+---
+
 ![Somewhere in New Mexico](media/bosqueapache.jpg)
 
 # Research notebook
@@ -9,7 +13,7 @@ This is [Greg Maurer](https://greg.pronghorns.net)'s research notebook. It is fi
      All data, code, results, and discussions are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
 
 
-## Copyright information
+## Copyright and licensing
 
-<a href="https://greg.pronghorns.net/research-notebook">Research Notebook</a> © 2007-2025 by <a href="https://greg.pronghorns.net/">Greg Maurer</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+All content on this site © 2007-2026 by <a href="https://greg.pronghorns.net/">Greg Maurer</a> and licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
 
