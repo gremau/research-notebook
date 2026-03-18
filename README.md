@@ -4,7 +4,7 @@ This is the repository for [Greg Maurer](https://greg.pronghorns.net)'s research
 
 **Caution**: All data, code, results, and discussions are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
 
-The website is created using the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material) documentation publishing system and served by [GitHub Pages](https://docs.github.com/en/pages). The `main` branch of this repository contains all source files for the web pages, which MkDocs renders into HTML files that are served from the `gh-pages` branch. These HTML files are what you see when you visit [the site](https://gremau.github.io/research-notebook) with your web browser. Source files are written in [Markdown](https://www.markdownguide.org/getting-started/) - a simple, plain-text markup language.
+The website is created using the [Zensical](https://zensical.org/docs/get-started/) documentation publishing system and served by [GitHub Pages](https://docs.github.com/en/pages). The `main` branch of this repository contains all source files for the web pages, which MkDocs renders into HTML files that are served from the `gh-pages` branch. These HTML files are what you see when you visit [the site](https://gremau.github.io/research-notebook) with your web browser. Source files are written in [Markdown](https://www.markdownguide.org/getting-started/) - a simple, plain-text markup language.
 
 ## Site and repository layout
 
@@ -39,6 +39,9 @@ If you want to contribute feel free to fork and send a pull request, file an iss
 
 Whenever a new Git commit is pushed to the `main` branch of this repository, a GitHub Action (see it in `.github/workflows/`) will run to rebuild the website with any new content changes in the source files. This action takes all content in the `main` branch and uses MkDocs to render HTML and other files, then commits the result to the `gh-pages` branch. It is these files that are served to visitors at <https://gremau.github.io/research-notebook>.
 
+To build the docs locally and preview them, you need a Python environment configured. Using [`uv`](https://docs.astral.sh/uv/) is easiest, so install that first (instructions [here](https://docs.astral.sh/uv/getting-started/installation/)). The Zensical environment is provided in `pyproject.toml` and `uv.lock` files, and, once `uv` is installed you can preview the docs using the built in Zensical live preview server
+
+    uv run zensical serve
 
 ## Contact
 

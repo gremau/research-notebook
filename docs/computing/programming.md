@@ -51,17 +51,13 @@ is provided by Unix for Poets, by Kenneth Ward Church. PDFs of this are all over
 
 * [My textfile notes](textfiles.md) - various command-line ways of manipulating text.
 * [My shell scripting notes](shellscripts.md), including Unix shell scripts and useful utilities.
-* [BASH hackers site](http://wiki.bash-hackers.org/doku.php) is helpful.
-* [Shell scripting tutorial](http://www.vectorsite.net/tsshell.html) by Greg Goebel/Public Domain
+* [BASH hackers site](http://wiki.bash-hackers.org/doku.php) is helpful. Now archived [here](https://github.com/rawiriblundell/wiki.bash-hackers.org)
 * sed is a text stream editor great for pattern matching and replacing
     - See [this tutorial](http://www.grymoire.com/Unix/Sed.html)
-    - [This page](http://sed.sourceforge.net/sed1line.txt) gives great one-line examples.\
 * [Awk](https://en.wikipedia.org/wiki/AWK) is also very useful for manipulating text files.
     - [My awk notes](awk.md)
-    - [The awk gateway](http://awk.info/)
     - [Awk one-liners explained part one](http://www.catonmat.net/blog/awk-one-liners-explained-part-one/)
     - [Awk one-liners explained part two](http://www.catonmat.net/blog/awk-one-liners-explained-part-two/)
-    - [Awk tutorial](http://www.vectorsite.net/tsawk_1.html) by Greg Goebel/Public Domain
 
 
 ## Python
@@ -72,7 +68,7 @@ very powerful tool for scientific computing and data analysis (on par
 with Matlab). Useful Python extensions for scientific computing are:
 
 * [NumPy](http://numpy.scipy.org/) - provides n-dimensional array objects and other useful numeric extensions to Python
-* [SciPy](http://www.scipy.org/) - provides a number of high-level mathematical tools for use in scientific computing (integration, optimization, fourier transforms...etc
+* [SciPy](http://www.scipy.org/) - provides a number of high-level mathematical tools for use in scientific computing (integration, optimization, fourier transforms...etc)
 * [Matplotlib](http://matplotlib.sourceforge.net/) - a plotting library that provides publication quality plots and plotting routines that are similar to Matlab's.
 * [IPython](http://ipython.org/) - an interactive shell that is designed to work well with NumPy, SciPy, and Matplotlib.
 * [SciKits](http://scikits.appspot.com/scikits) - add on toolkits that complement SciPy (various statistical models, timeseries analysis, machine-learning, image processing, etc.
@@ -89,12 +85,6 @@ with Matlab). Useful Python extensions for scientific computing are:
 * [PyPlot documentation](http://matplotlib.sourceforge.net/api/pyplot_api.html) for the Matlab-like plotting framework in matplotlib.
 * [Python package index](http://pypi.python.org/pypi) - an index of many add-on tools discussed in this wiki.
 
-### Python forums
-
-Python (and its scientific extensions) have a large user/developer community supporting them. These are some forums that might be helpful:
-
-* [http://www.scipy.org/Mailing_Lists](http://www.scipy.org/Mailing_Lists)
-* [http://old.nabble.com/Scipy-User-f33045.html](http://old.nabble.com/Scipy-User-f33045.html)
 
 ### My Python notes
 
@@ -107,8 +97,7 @@ above.
 
 ### Other
 
-* [The Python Wiki Vim page](http://wiki.python.org/moin/Vim) and [this blog
-entry](http://dancingpenguinsoflight.com/2009/02/python-and-vim-make-your-own-ide/) give some interesting tips about using vim as a python source editor.
+* [The Python Wiki Vim page](http://wiki.python.org/moin/Vim) is being archived...
 
 
 ## MATLAB (and clones)
@@ -122,7 +111,6 @@ scientific and engineering computing.
 * [Official MathWorks documentation](http://www.mathworks.com/help/techdoc/)
 * [Function reference](http://www.mathworks.com/help/techdoc/ref/f16-6011.html)
 * [MATLAB Central](http://www.mathworks.com/matlabcentral/) - the official user/developer community, including a [file exchange](http://www.mathworks.com/matlabcentral/fileexchange/).
-* [Kluid forums](http://www.kluid.com/mlib/index.php) has matlab and octave forums.
 * [My MATLAB notes](matlab_notes.md)
 
 ### Clones of Matlab
@@ -130,7 +118,7 @@ scientific and engineering computing.
 There are a bunch of free/open-source clones of Matlab that have various
 levels of syntax compatibility.
 
-* [GNU Octave](http://www.gnu.org/software/octave/) - generally very compatible with Matlab, though some functions are missing.\
+* [GNU Octave](http://octave.org) - generally very compatible with Matlab, though some functions are missing.
 * [SciLab](http://www.scilab.org/)
 * [FreeMat](http://freemat.sourceforge.net/)
 
@@ -142,7 +130,6 @@ and graphics.
 
 * [R-project homepage](http://www.r-project.org/index.html)
 * [R manuals](http://cran.r-project.org/manuals.html)
-* [R wiki](http://rwiki.sciviews.org/doku.php)
 * [knitr](https://github.com/yihui/knitr#readme) - a nice report generating engine for R
 * [My R notes](r_notes.md)
 
