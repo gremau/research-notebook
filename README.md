@@ -4,7 +4,7 @@ This is the repository for [Greg Maurer](https://greg.pronghorns.net)'s research
 
 **Caution**: All data, code, results, and discussions are presented in raw, preliminary form. They have not been peer reviewed and are provided without guarantee of quality, accuracy, or safety.
 
-The website is created using the [Zensical](https://zensical.org/docs/get-started/) documentation publishing system and served by [GitHub Pages](https://docs.github.com/en/pages). The `main` branch of this repository contains all source files for the web pages, which MkDocs renders into HTML files that are served from the `gh-pages` branch. These HTML files are what you see when you visit [the site](https://gremau.github.io/research-notebook) with your web browser. Source files are written in [Markdown](https://www.markdownguide.org/getting-started/) - a simple, plain-text markup language.
+The website is created using the [Zensical](https://zensical.org/docs/get-started/) documentation publishing system and served by [GitHub Pages](https://docs.github.com/en/pages). The `main` branch of this repository contains all source files for the web pages, which Zensical renders into HTML files that are served from the `gh-pages` branch. These HTML files are what you see when you visit [the site](https://gremau.github.io/research-notebook) with your web browser. Source files are written in [Markdown](https://www.markdownguide.org/getting-started/) - a simple, plain-text markup language.
 
 ## Site and repository layout
 
@@ -24,7 +24,7 @@ research-notebook/
 
 ```
 
-The `index.md` file is the source for the HTML index, or landing page, of the website. The `mkdocs.yml` file is a YAML file that defines how the website is structured, the navigation system, and the rendering options that MkDocs uses to build the HTML and other files.
+The `index.md` file is the source for the HTML index, or landing page, of the website. The `zensical.toml` file is a TOML file that defines how the website is structured, the navigation system, and the rendering options that MkDocs uses to build the HTML and other files.
 
 ## Related stuff
 
@@ -39,7 +39,7 @@ If you want to contribute feel free to fork and send a pull request, file an iss
 
 Whenever a new Git commit is pushed to the `main` branch of this repository, a GitHub Action (see it in `.github/workflows/`) will run to rebuild the website with any new content changes in the source files. This action takes all content in the `main` branch and uses MkDocs to render HTML and other files, then commits the result to the `gh-pages` branch. It is these files that are served to visitors at <https://gremau.github.io/research-notebook>.
 
-To build the docs locally and preview them, you need a Python environment configured. This project uses [`uv`](https://docs.astral.sh/uv/) to manage the build environment, so install that first (instructions [here](https://docs.astral.sh/uv/getting-started/installation/)). The Zensical environment is provided in `pyproject.toml` and `uv.lock` files, and, once `uv` is installed on your local machine you can preview the docs using the built in Zensical live preview server from the project directory.
+To build and preview the docs locally you need a Python environment configured with Zensical. This project uses [`uv`](https://docs.astral.sh/uv/) to manage the build environment, so install that first (instructions [here](https://docs.astral.sh/uv/getting-started/installation/)). The Python environment is described in `pyproject.toml` and `uv.lock` files, and, once `uv` is installed on your local machine you can preview the docs using the Zensical live preview server from the project directory.
 
     uv run zensical serve
 
