@@ -1,6 +1,6 @@
 # Shell scripting notes
 
-Notes on using the Unix shell (bash, ash, et. al) to manipulate files,
+Notes on using the Unix shell (bash, zsh, et. al) to manipulate files,
 text, etc.
 
  **See also:** [General programming page](programming.md), [the Awk page](awk.md), [Vim notes](vim_notes.md), [Text files](textfiles.md).

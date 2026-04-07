@@ -1,9 +1,13 @@
 # AWK Notes
 
-Awk is great for editing delimited text files, and can be easily used in
-[shell scripts](shellscripts.md).
+[Awk](https://en.wikipedia.org/wiki/AWK) is a programming language that is great for manipulating and editing delimited text files, and it can be easily used in [shell scripts](shellscripts.md). There are a few different versions, one of which is usually present on UNIX-derived systems (Linux, MacOS).
 
-Back to [general programming page](programming.md)
+A few resources
+
+* [GNU Awk guide](https://www.gnu.org/software/gawk/manual/gawk.html)
+* [Grymoire's guide](https://grymoire.com/Unix/AwkRef.html)
+* [Awk one-liners explained part one](http://www.catonmat.net/blog/awk-one-liners-explained-part-one/)
+* [Awk one-liners explained part two](http://www.catonmat.net/blog/awk-one-liners-explained-part-two/)
 
 ## Basic stuff
 

@@ -52,12 +52,10 @@ is provided by Unix for Poets, by Kenneth Ward Church. PDFs of this are all over
 * [My textfile notes](textfiles.md) - various command-line ways of manipulating text.
 * [My shell scripting notes](shellscripts.md), including Unix shell scripts and useful utilities.
 * [BASH hackers site](http://wiki.bash-hackers.org/doku.php) is helpful. Now archived [here](https://github.com/rawiriblundell/wiki.bash-hackers.org)
-* sed is a text stream editor great for pattern matching and replacing
+* sed is a text stream editor great for pattern matching and replacing text
+    - [GNU sed manual](https://www.gnu.org/software/sed/manual/sed.html)
     - See [this tutorial](http://www.grymoire.com/Unix/Sed.html)
-* [Awk](https://en.wikipedia.org/wiki/AWK) is also very useful for manipulating text files.
-    - [My awk notes](awk.md)
-    - [Awk one-liners explained part one](http://www.catonmat.net/blog/awk-one-liners-explained-part-one/)
-    - [Awk one-liners explained part two](http://www.catonmat.net/blog/awk-one-liners-explained-part-two/)
+* [Awk](https://en.wikipedia.org/wiki/AWK) is also very useful for manipulating text files. My notes [here](awk.md).
 
 
 ## Python
