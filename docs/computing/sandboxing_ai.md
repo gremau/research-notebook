@@ -32,4 +32,12 @@ Once your environment is set up and you are in the shell of your VM, you'll want
 
     curl -fsSL https://claude.ai/install.sh | bash
 
-From here, you'll follow the prompts to connect Claude to your Anthropic account, and away you go.
+Occasionally there are some install issues with Claude. See the [Anthropic troubleshooting docs](https://code.claude.com/docs/en/troubleshooting) if something comes up. You'll probably also be prompted to add the newly installed `claude` to your `bash` path:
+
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+
+From here, start `claude`, follow the prompts to connect Claude to your Anthropic account, and away you go.
+
+## Preparing your environment first
+
+One thing to note is that, if your AI workflow is truly "agentic",  the AI agent will actually be writing *and then running code* in the VM sandbox you have created. Most likely that will require some developer tools that the agent can use, like Python, R, etc. A few things are installed by default in the VM you just created, but not much. You can have the agent install what you need, but that can consume quite a few tokens. If you know what you want to use, or what you want the agent to build in, you may want to install a basic software environment for it to work in. See the [VM setup guide](virtual-machine-setup.md) for some easy ways to do this. You could also provide the agent with a simple script of tools to install.
