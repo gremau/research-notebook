@@ -68,7 +68,7 @@ Be aware that, by default, R downloads and compiles CRAN packages from source fo
 
 ## Coding agents
 
-If you are doing any agentic development (or vibe coding) you'll want to install a terminal coding agent that lets you access LLMs from the shell of your VM. I use [Claude Code](https://claude.com/product/claude-code) the most, but [OpenCode](https://opencode.ai/) or the big-name LLM developers' tools, like [Codex](https://openai.com/codex/) and [Gemini CLI](https://geminicli.com/) all work similarly. Installing the agent usually involves just a one-line bash install script that you run from the terminal. For OpenCode, this is
+If you are doing any agentic development (or vibe coding) you'll want to install a terminal coding agent that lets you access LLMs from the shell of your VM. I use [Claude Code](https://claude.com/product/claude-code) the most, but [OpenCode](https://opencode.ai/) or the big-name LLM developers' tools, like [Codex](https://openai.com/codex/) and [Gemini CLI](https://geminicli.com/) all work similarly. Installing the agent usually involves just a one-line bash install script that you run from the terminal. For example, to install Opencode just issue
 
     curl -fsSL https://opencode.ai/install | bash
 

@@ -1,10 +1,12 @@
 # Sandboxing AI agents
 
-Running agentic AI (like [Claude Code](https://claude.com/product/claude-code)) on your local machine seems a little risky since an agent could conceivably gain access to private data, system files, etc. There are a few options to confine the AI to a "sandbox," which could be something like a Docker container or virtual machine (VM). A virtual machine is a little more isolated from the local system, so that is what I use. 
+Running agentic AI (like [Claude Code](https://claude.com/product/claude-code), for example) on your local machine seems a little risky since the agent could conceivably gain access to private data, system files, etc. There are a few options to confine the AI agent to a "sandbox," which could be something like a Docker container or virtual machine (VM). A virtual machine is a little more isolated from the local system, so that is what I use. 
 
-## Using Multipass with Claude Code
+## Using Multipass with an AI coding agent
 
-[Multipass](https://multipass.run/) is a lightweight VM orchestrator from Canonical that runs in MacOS, Windows, and Linux. You can use Multipass to set up Ubuntu VMs from the commandline in a fairly frictionless way on your local host machine (your laptop, for example). On Mac I install with 
+[Multipass](https://multipass.run/) is a lightweight VM orchestrator from Canonical that runs in MacOS, Windows, and Linux. You can use Multipass to set up Ubuntu VMs from the commandline in a fairly frictionless way on your local host machine (your laptop, for example). You then install the AI coding agent of your choice in this VM so it only has access to that system. Here we are using Claude Code as the example, but this could work equally well with [OpenCode](https://opencode.ai/) or other big-name commercial LLM environments like [Codex](https://openai.com/codex/) and [Gemini CLI](https://geminicli.com/).
+
+ On Mac I install with 
 
     brew install multipass
 
@@ -40,4 +42,4 @@ From here, start `claude`, follow the prompts to connect Claude to your Anthropi
 
 ## Preparing your environment first
 
-One thing to note is that, if your AI workflow is truly "agentic",  the AI agent will actually be writing *and then running code* in the VM sandbox you have created. Most likely that will require some developer tools that the agent can use, like Python, R, etc. A few things are installed by default in the VM you just created, but not much. You can have the agent install what you need, but that can consume quite a few tokens. If you know what you want to use, or what you want the agent to build in, you may want to install a basic software environment for it to work in. See the [VM setup guide](virtual-machine-setup.md) for some easy ways to do this. You could also provide the agent with a simple script of tools to install.
+One thing to note is that, if your AI workflow is actually "agentic", the AI agent will be writing *and then running* code in the VM sandbox you have created. Most likely that will require some developer tools that the agent can use, like Python, R, or a database. A few things are installed by default in the VM you just created, but not much. You can have the agent install what you need, but that can consume quite a few tokens, so if you already know what you want the agent to use and build with you may want to just install the basic software environment it needs first. See the [VM setup guide](virtual-machine-setup.md) for some easy ways to do this. You could also provide the agent with a simple script of tools to install.
