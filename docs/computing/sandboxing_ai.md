@@ -1,16 +1,16 @@
 # Sandboxing AI agents
 
-Running agentic AI (like [Claude Code](https://claude.com/product/claude-code), for example) on your local machine seems a little risky since the agent could conceivably gain access to private data, system files, etc. There are a few options to confine the AI agent to a "sandbox," which could be something like a Docker container or virtual machine (VM). A virtual machine is a little more isolated from the local system, so that is what I use. 
+Running agentic AI (like [Claude Code](https://claude.com/product/claude-code), for example) on your local machine seems a little risky since the agent could conceivably gain access to private data, system files, etc. There are a few options to confine the AI agent to a "sandbox," which could be something like a Docker container or virtual machine (VM). A virtual machine is a little more isolated from the local system, so that is what I usually use. 
 
-## Using Multipass with an AI coding agent
+## Using Multipass virtual machines
 
 [Multipass](https://multipass.run/) is a lightweight VM orchestrator from Canonical that runs in MacOS, Windows, and Linux. You can use Multipass to set up Ubuntu VMs from the commandline in a fairly frictionless way on your local host machine (your laptop, for example). You then install the AI coding agent of your choice in this VM so it only has access to that system. Here we are using Claude Code as the example, but this could work equally well with [OpenCode](https://opencode.ai/) or other big-name commercial LLM environments like [Codex](https://openai.com/codex/) and [Gemini CLI](https://geminicli.com/).
 
- On Mac I install with 
+ The first step is to install the Multipass software, which is available in Homebrew for Mac. 
 
     brew install multipass
 
-, but this would be different for Windows or Linux. Once it is installed, you can start the GUI if you want, or just use the commandline interface to spin up VMs. Here is how to start a VM for Claude to work in.
+This would be different for Windows or Linux. Once it is installed, you can start the GUI if you want, or just use the commandline interface to spin up VMs. Here is how to start a basic VM for Claude to work in:
 
     multipass launch --name claude-sandbox --disk 20G --memory 4G
 
@@ -40,6 +40,15 @@ Occasionally there are some install issues with Claude. See the [Anthropic troub
 
 From here, start `claude`, follow the prompts to connect Claude to your Anthropic account, and away you go.
 
-## Preparing your environment first
+### Preparing your environment first
 
 One thing to note is that, if your AI workflow is actually "agentic", the AI agent will be writing *and then running* code in the VM sandbox you have created. Most likely that will require some developer tools that the agent can use, like Python, R, or a database. A few things are installed by default in the VM you just created, but not much. You can have the agent install what you need, but that can consume quite a few tokens, so if you already know what you want the agent to use and build with you may want to just install the basic software environment it needs first. See the [VM setup guide](virtual-machine-setup.md) for some easy ways to do this. You could also provide the agent with a simple script of tools to install.
+
+## Some other sandboxiing options
+
+I haven't tried these but they seem interesting and a little more lightweight than a full VM.
+
+* [Jai](https://jai.scs.stanford.edu/) is a lightweight container system purpose-built for isolating AI agents on Linux systems.
+* [nono](https://nono.sh/) is a safe runtime environment for AI agents that works on MacOS and Linux (and WSL in Windows).
+
+There is also [bubblewrap](https://github.com/containers/bubblewrap) for Linux systems, but this may require a little more configuration than the above.

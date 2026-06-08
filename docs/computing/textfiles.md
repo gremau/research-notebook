@@ -62,8 +62,6 @@ files, etc.).
   * [reStructuredText](http://docutils.sourceforge.net/docs/user/rst/quickstart.html)
   * [ASCIIdoc](http://www.methods.co.nz/asciidoc/)
 * **Markdown extensions/supersets**
-  * [Pandoc](http://johnmacfarlane.net/pandoc/) Markdown
-  * [MultiMarkdown](http://fletcherpenney.net/multimarkdown/)
-  * [kramdown](http://kramdown.rubyforge.org)
+  * [Pandoc](http://pandoc.org) Markdown (part of the Pandoc document converter)
 
 I tend to use [Pandoc](pandoc.md) to create documents.

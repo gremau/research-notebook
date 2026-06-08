@@ -13,17 +13,17 @@ Virtual environments can now be created with `venv`, but there is still no way t
 
     sudo apt install -y python3-pip python3-pip-whl
 
-Now that you have `venv` and `pip`, you can create a virtual environment and install packages into it.
+Now that you have `venv` and `pip`, you or an agent can create a virtual environment and install packages into it.
 
     python3 -m venv .venv        # Create the .venv environment in your project
     source .venv/bin/activate    # Activate it (your shell prompt should change)
     pip install pandas openpyxl  # Install modules you need
 
-The basics of this process are in the [Python packaging guide](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/). There are a number of other options for managing Python environments during development. The standard is `pyenv`, which is in the archive (`sudo apt install pyenv`), but you could also use `uv` or `pixi`. I've been trying [`uv`](https://github.com/astral-sh/uv) recently. Install it with `curl` (which is already available).
+The basics of this process are in the [Python packaging guide](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/). There are a number of other options for managing Python environments during development. The standard is `pyenv`, which is in the archive (`sudo apt install pyenv`), but you could also use [uv](https://github.com/astral-sh/uv) or [pixi](https://github.com/prefix-dev/pixi/). I've been trying `uv` during Python development recently and it is fast, lightweight, and fairly easy to learn. Install it with `curl` (which is already available).
 
     curl -LsSf https://astral.sh/uv/install.sh | sh
 
-With `uv` installed, creating the Python virtual environment is handled automatically and dependencies can be declared for any project or script. For a `uv`-based project you'd initialize your project directory and add dependencies in two steps.
+With `uv` installed, creating the Python virtual environment is handled automatically and dependencies can be declared for any project or script. For a uv-based project you'd initialize your project directory and add dependencies in two steps.
 
     uv init                  # Initialize the project, which creates .venv
     uv add pandas openpyxl   # Install modules you need
@@ -32,7 +32,7 @@ The creation of `.venv` is automatic and the environment is managed automaticall
 
     uv run --with pandas,openpyxl my_script.py    # Run a script with dependencies.
 
-There is plenty more about `uv` in [the docs](https://docs.astral.sh/uv/). The [pixi](https://github.com/prefix-dev/pixi/) package manager works with multiple languages and platforms, not just Python. Its a little more complex, but is a good solution when you need scientific Python packages and dependencies from the [conda ecosystem](https://conda.org/) are needed, or are building a multi-language system. 
+There is plenty more about `uv` in [the docs](https://docs.astral.sh/uv/). The [pixi](https://github.com/prefix-dev/pixi/) package manager works with multiple languages and platforms, not just Python. Its a little more complex, but is a good solution when you need scientific Python packages and dependencies from the [conda ecosystem](https://conda.org/), or are building a multi-language system. 
 
 Most of these suggestions come from the Ubuntu for Developers [Python setup page](https://documentation.ubuntu.com/ubuntu-for-developers/howto/python-setup/).
 
@@ -63,12 +63,12 @@ Once ready, run R (just type `R` in the shell and press enter) and you should ha
 install.packages("tidyverse")
 ```
 
-Be aware that, by default, R downloads and compiles CRAN packages from source for Linux installations. This can take a long time. At times you may want to use version in the Ubuntu repository (`sudo apt install r-cran-tidyverse`, for example). There is also the [Posit "Public Package Manager"](https://packagemanager.posit.co/client/#/) that provides access to pre-compiled Linux R packages. For more information and troubleshooting see CRAN's [Ubuntu Packages for R README](https://cran.r-project.org/bin/linux/ubuntu/fullREADME.html).
+Be aware that, by default, R downloads and compiles CRAN packages from source for Linux installations. This can take a long time. At times you may want to use package versions in the Ubuntu repository (`sudo apt install r-cran-tidyverse`, for example). There is also the [Posit "Public Package Manager"](https://packagemanager.posit.co/client/#/) that provides access to pre-compiled Linux R packages. For more information and troubleshooting see CRAN's [Ubuntu Packages for R README](https://cran.r-project.org/bin/linux/ubuntu/fullREADME.html).
 
 
 ## Coding agents
 
-If you are doing any agentic development (or vibe coding) you'll want to install a terminal coding agent that lets you access LLMs from the shell of your VM. I use [Claude Code](https://claude.com/product/claude-code) the most, but [OpenCode](https://opencode.ai/) or the big-name LLM developers' tools, like [Codex](https://openai.com/codex/) and [Gemini CLI](https://geminicli.com/) all work similarly. Installing the agent usually involves just a one-line bash install script that you run from the terminal. For example, to install Opencode just issue
+If you are doing any agentic development (or vibe coding) you'll want to install a terminal coding agent that lets you access LLMs from the shell of your VM. I use [Claude Code](https://claude.com/product/claude-code) the most, but [OpenCode](https://opencode.ai/) or the commercial LLM provider tools, like [Codex](https://openai.com/codex/) and [Gemini CLI](https://geminicli.com/) all work similarly. Installing the agent usually involves just a one-line bash install script that you run from the terminal. For example, to install Opencode just issue
 
     curl -fsSL https://opencode.ai/install | bash
 
