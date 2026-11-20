@@ -1,6 +1,6 @@
 # Sandboxing AI agents
 
-Running agentic AI (like [Claude Code](https://claude.com/product/claude-code), for example) on your local machine seems a little risky since the agent could conceivably gain access to private data, system files, etc. There are a few options to confine the AI agent to a "sandbox," which could be something like a Docker container or virtual machine (VM). A virtual machine is a little more isolated from the local system, so that is what I usually use. 
+Running agentic AI (like [Claude Code](https://claude.com/product/claude-code), for example) on your local machine seems a little risky since the agent could conceivably gain access to private data, system files, etc. There are a few options to confine the AI agent to a "sandbox," which could be something like a Docker container or virtual machine (VM). A virtual machine is a little more isolated from the local system (referred to as the "host"), so that is what I usually use. 
 
 ## Using Multipass virtual machines
 
@@ -14,13 +14,13 @@ This would be different for Windows or Linux. Once it is installed, you can star
 
     multipass launch --name claude-sandbox --disk 20G --memory 4G
 
-It takes just a minute to spin up the VM, then you can enter the shell and explore.
+It takes just a minute to spin up the VM, then you can log in to the new virtual machine shell and explore.
 
     multipass shell claude-sandbox
 
-There isn't much there - Multipass just creates an Ubuntu Linux installation with a few things installed, and your shell will be in the home directory of the `ubuntu` user. If you want to mount a local directory on your host machine to the new VM you can do that from the host shell. For example, you could mount your home directory to the `claude-sandbox` VM.
+There isn't much so see here - Multipass has created an Ubuntu Linux installation with a few things installed, and you have just logged in as the `ubuntu` user and are in the home directory. If you want to mount a local directory on your host machine to the new VM you can do that from the host shell. For example, you could mount your home directory to the `claude-sandbox` VM.
 
-    multipass mount $HOME claude-sandbox
+    multipass mount $HOME claude-sandbox 
 
 If you now run `multipass info claude-sandbox` you'll see the mount listed. The home directory is mounted at `/home/ubuntu/username`, and you'll find it there if you are logged into the `claude-sandbox` VM's shell. **You probably want to be careful about what parts of your local filesystem you mount in the VM!!!** Claude, or you, can read, edit and delete things on the host filesystem once it is mounted in the VM. You can pass the `--read-only` option during mounting to prohibit write access. To unmount a local directory just use `multipass umount`.
 
@@ -44,7 +44,7 @@ From here, start `claude`, follow the prompts to connect Claude to your Anthropi
 
 One thing to note is that, if your AI workflow is actually "agentic", the AI agent will be writing *and then running* code in the VM sandbox you have created. Most likely that will require some developer tools that the agent can use, like Python, R, or a database. A few things are installed by default in the VM you just created, but not much. You can have the agent install what you need, but that can consume quite a few tokens, so if you already know what you want the agent to use and build with you may want to just install the basic software environment it needs first. See the [VM setup guide](virtual-machine-setup.md) for some easy ways to do this. You could also provide the agent with a simple script of tools to install.
 
-## Some other sandboxiing options
+## Some other sandboxing options
 
 I haven't tried these but they seem interesting and a little more lightweight than a full VM.
 

@@ -160,3 +160,7 @@ logging.basicConfig(level=logging.DEBUG)
 logging.exception("Something bad happened!")
 logging.debug("Finishing for loop")
 ~~~
+
+## Resources:
+
+* The [Thinking in Python](https://thinkinginpython.com/) book seems pretty good.

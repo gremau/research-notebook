@@ -43,15 +43,18 @@ An up-to-date R is available in the Ubuntu software repository with a selection 
 
 First you need the Ubuntu archive GPG key from "Michael Rutter":
 
-    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+
+    # You may want to verify it was installed with this:
+    gpg --show-keys /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
 
 This lets you access the Ubuntu CRAN R PPA securely once you add it to your `sources.list`. There are a few ways add the CRAN R archive for Ubuntu to `sources.list`. You can just edit `/etc/apt/sources.list` to contain this line:
 
-    deb https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/
+    deb https://cloud.r-project.org/bin/linux/ubuntu resolute-cran40/
 
 But, the **recommended way** is to have a separate file in `/etc/apt/sources.list.d/`. To do that try
 
-    sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/'
+    sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu resolute-cran40/'
 
 This will create a new file with the repository address as the filename and the recommended line inside. You should check to make sure that is the case. Once this looks ok update `apt` and install R.
 
@@ -73,3 +76,15 @@ If you are doing any agentic development (or vibe coding) you'll want to install
     curl -fsSL https://opencode.ai/install | bash
 
 . The script will install most of the pieces you need, and then you can start the agent, authenticate with your LLM provider from the terminal interface, and start prompting. Be aware that running an AI agent in the shell this way gives it full access to any software and files available from the shell. If there are sensitive files in the VM, or the VM mounts the local host machine (such as your work or personal laptop), be careful not to give the agent free reign. See the [sandboxing guide](sandboxing_ai.md) for more.
+
+## Scripting this process
+
+It might be helpful to write a script to rebuild your favorite VM configuration when needed (such as when they fail --- see below). In `multipass` you can do this by passing a cloud-init YAML configuration with install commands.
+
+## Troubleshooting
+
+VMs with agents running can get corrupted and stop working and you may have to kill instances and rebuild them sometimes. In `multipass` on MacOS, this happens annoyingly often, but it may be worth shutting down the instance and then trying to restart the Multipass daemon (background service) first:
+
+    sudo launchctl unload /Library/LaunchDaemons/com.canonical.multipassd.plist
+    sudo launchctl load /Library/LaunchDaemons/com.canonical.multipassd.plist
+
