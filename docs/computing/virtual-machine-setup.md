@@ -2,7 +2,6 @@
 
 I commonly do development projects, particularly application-level development like web or database apps, inside a virtual machine (VM). This lets me install and configure software components at the OS level, then any necessary code to glue it together, without messing up my laptop environment. Its also easier to deploy an application from a virtual machine like this. I generally use [Multipass](https://multipass.run/) to create very minimal Ubuntu Linux VMs, and then develop from there. This usally means installing R, a Python environment, and possibly PostgreSQL, NginX, or other things necessary for the use-case. You can use an AI agent (like [Claude Code](https://claude.com/product/claude-code)) to help build this out, but that consumes a lot of tokens as the agent figures out what is available in the VM and installs everything. So, if you already know what tools you want to use, it makes sense have a basic installation of those ready to go before your or the agent start writing code.
 
-
 ## Set up Python
 
 Python 3 should already be installed in an Ubuntu VM and accessible as `python3`. However, this is just the interpreter and you will still need standard class libraries and support for virtual environments (`venv`) to do development. To get those install the `python3-full` package from the Ubuntu archive, which will bring these in.
@@ -54,7 +53,8 @@ This lets you access the Ubuntu CRAN R PPA securely once you add it to your `sou
 
 But, the **recommended way** is to have a separate file in `/etc/apt/sources.list.d/`. To do that try
 
-    sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu resolute-cran40/'
+    # Note that the $(lsb_release -cs) expands to the Ubuntu release codename
+    sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 
 This will create a new file with the repository address as the filename and the recommended line inside. You should check to make sure that is the case. Once this looks ok update `apt` and install R.
 
@@ -66,7 +66,7 @@ Once ready, run R (just type `R` in the shell and press enter) and you should ha
 install.packages("tidyverse")
 ```
 
-Be aware that, by default, R downloads and compiles CRAN packages from source for Linux installations. This can take a long time. At times you may want to use package versions in the Ubuntu repository (`sudo apt install r-cran-tidyverse`, for example). There is also the [Posit "Public Package Manager"](https://packagemanager.posit.co/client/#/) that provides access to pre-compiled Linux R packages. For more information and troubleshooting see CRAN's [Ubuntu Packages for R README](https://cran.r-project.org/bin/linux/ubuntu/fullREADME.html).
+For more information and troubleshooting see CRAN's [Ubuntu Packages for R README](https://cran.r-project.org/bin/linux/ubuntu/fullREADME.html). Be aware that when using `install.packages()` the default behavior is for R to download and compile CRAN packages from source. This can take a long time. At times you may want to use package versions in the Ubuntu repository (`sudo apt install r-cran-tidyverse`, for example). There is also the [Posit "Public Package Manager"](https://packagemanager.posit.co/client/#/) that provides access to pre-compiled Linux R packages, and the [**r2u**](https://github.com/eddelbuettel/r2u) project. 
 
 
 ## Coding agents
@@ -79,7 +79,14 @@ If you are doing any agentic development (or vibe coding) you'll want to install
 
 ## Scripting this process
 
-It might be helpful to write a script to rebuild your favorite VM configuration when needed (such as when they fail --- see below). In `multipass` you can do this by passing a cloud-init YAML configuration with install commands.
+It might be helpful to write a script to rebuild your favorite VM configuration when needed (such as when they fail --- see below). In `multipass` you can do this by passing a `cloud-init` YAML configuration with install commands during the launch. For example, I've created an `initvm-ubu-py-r.yaml` file in one of my GitHub repositories that sets a VM with the Python and R configurations shown above, and that can be passed as:
+
+    multipass launch \
+      --name my-dev-vm \
+      --cpus 2 \
+      --memory 4G \
+      --disk 20G \
+      --cloud-init https://raw.githubusercontent.com/gremau/sysconfigs/refs/heads/main/cloud-init-yaml/initvm-ubu-py-r.yaml
 
 ## Troubleshooting
 
